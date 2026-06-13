@@ -3,7 +3,7 @@ services:
     name: skillcohort-api
     env: node
     rootDir: server
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npm run start
     envVars:
       - key: NODE_ENV
