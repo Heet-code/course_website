@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://skillcohort-api.onrender.com/api/:path*"
+    },
+    {
+      "source": "/((?!assets/|favicon.ico|logo-BKzGur3R.png).*)",
+      "destination": "/index.html"
+    }
+  ]
+}

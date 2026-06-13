@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: var(--color-bg);
+  --color-bg-elevated: var(--color-bg-elevated);
+  --color-surface: var(--color-surface);
+  --color-surface-muted: var(--color-surface-muted);
+  --color-border: var(--color-border);
+  --color-border-strong: var(--color-border-strong);
+
+  --color-text-main: var(--color-text-main);
+  --color-text-muted: var(--color-text-muted);
+  --color-text-subtle: var(--color-text-subtle);
+  --color-text-disabled: var(--color-text-disabled);
+
+  --color-primary: var(--color-primary);
+  --color-primary-hover: var(--color-primary-hover);
+  --color-primary-text: var(--color-primary-text);
+
+  --color-secondary: var(--color-secondary);
+  --color-secondary-hover: var(--color-secondary-hover);
+
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  
+  --radius-ctrl: 6px;
+  --radius-card: 8px;
+  --radius-overlay: 12px;
+}
+
+@layer base {
+  :root {
+    /* Light Theme Tokens */
+    --color-bg: #FFF5E6;
+    --color-bg-elevated: #FFFFFF;
+    --color-surface: #FFFFFF;
+    --color-surface-muted: #F7EFE4;
+    --color-border: rgba(17, 24, 39, 0.12);
+    --color-border-strong: rgba(17, 24, 39, 0.20);
+    
+    --color-text-main: #111827;
+    --color-text-muted: #374151;
+    --color-text-subtle: #6B7280;
+    --color-text-disabled: #9CA3AF;
+
+    --color-primary: #FAD4C0;
+    --color-primary-hover: #F8C4AA;
+    --color-primary-text: #111827;
+    
+    --color-secondary: #80A1C1;
+    --color-secondary-hover: #6F93B6;
+    
+    --color-success: #16A34A;
+    --color-warning: #D97706;
+    --color-danger: #DC2626;
+
+    font-family: var(--font-sans);
+    color: var(--color-text-main);
+    background-color: var(--color-bg);
+    scroll-behavior: smooth;
+  }
+
+  .dark {
+    /* Dark Theme Tokens */
+    --color-bg: #0F1115;
+    --color-bg-elevated: #14171D;
+    --color-surface: #181B22;
+    --color-surface-muted: #222631;
+    --color-border: rgba(255, 255, 255, 0.12);
+    --color-border-strong: rgba(255, 255, 255, 0.20);
+
+    --color-text-main: #F8FAFC;
+    --color-text-muted: #CBD5E1;
+    --color-text-subtle: #94A3B8;
+    --color-text-disabled: #64748B;
+
+    --color-primary: #FAD4C0;
+    --color-primary-hover: #F8C4AA;
+    --color-primary-text: #111827;
+
+    --color-secondary: #80A1C1;
+    --color-secondary-hover: #6F93B6;
+
+    --color-success: #16A34A;
+    --color-warning: #D97706;
+    --color-danger: #DC2626;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text-main);
+    font-family: var(--font-sans);
+  }
+
+  /* Accessibility rules: WCAG 2.2 AA visible focus rings */
+  *:focus-visible {
+    outline: 2px solid var(--color-secondary);
+    outline-offset: 2px;
+  }
+  
+  /* Form Label styles */
+  label {
+    font-weight: 600;
+  }
+
+  /* Hide standard scrollbars but allow scrolling cleanly */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Custom bento cell animations and styles */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.bento-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.bento-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  border-color: var(--color-secondary);
+}
+
+.dark .bento-card:hover {
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+}
