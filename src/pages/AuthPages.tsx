@@ -56,13 +56,6 @@ export const LoginPage: React.FC = () => {
     setError(null);
   }, []);
 
-  const handleAutofill = useCallback((role: UserRole) => {
-    setSelectedRole(role);
-    setEmail(ROLE_CREDENTIALS[role].email);
-    setPassword(ROLE_CREDENTIALS[role].password);
-    setError(null);
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
@@ -224,7 +217,7 @@ export const LoginPage: React.FC = () => {
         </Button>
 
         {/* ==========================================
-            CLICKABLE DEMO CREDENTIALS
+            DEMO CREDENTIALS HINTS (STATIC)
            ========================================== */}
         <div className="p-4 bg-surface-muted border border-border-strong rounded-ctrl text-xs text-left space-y-2">
           <div className="flex items-center justify-between gap-2 border-b border-border pb-1.5">
@@ -233,7 +226,7 @@ export const LoginPage: React.FC = () => {
               Demo Credentials
             </h4>
             <span className="text-[9px] font-semibold text-text-subtle">
-              Click to autofill
+              Static hints
             </span>
           </div>
 
@@ -241,41 +234,20 @@ export const LoginPage: React.FC = () => {
             {ROLES.map((role) => {
               const cred = ROLE_CREDENTIALS[role];
               const Icon = cred.icon;
-              const isActive = selectedRole === role;
 
               return (
-                <button
+                <div
                   key={role}
-                  type="button"
-                  onClick={() => handleAutofill(role)}
-                  aria-label={`Autofill ${cred.label} demo credentials`}
-                  className={`
-                    w-full flex items-center gap-2.5 p-2 rounded-card transition-all duration-150 text-left
-                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-1
-                    ${isActive
-                      ? 'bg-primary/50 border border-primary'
-                      : 'bg-transparent border border-transparent hover:bg-surface hover:border-border/60'
-                    }
-                  `}
+                  className="w-full flex items-center gap-2.5 p-2 rounded-card border border-border/30 text-left bg-surface/30"
                 >
-                  <div className={`
-                    p-1 rounded flex-shrink-0
-                    ${isActive ? 'bg-surface text-secondary' : 'bg-surface-muted/80 text-text-subtle'}
-                  `}>
+                  <div className="p-1 rounded flex-shrink-0 bg-surface-muted text-text-subtle">
                     <Icon className="h-3 w-3" strokeWidth={2.5} />
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className={`font-extrabold ${isActive ? 'text-text-main' : 'text-text-muted'}`}>
-                        {cred.label}
-                      </span>
-                      {isActive && (
-                        <span className="text-[7px] font-black text-secondary uppercase tracking-wider bg-secondary/10 px-1 py-px rounded">
-                          Active
-                        </span>
-                      )}
-                    </div>
+                    <span className="font-extrabold text-text-muted block">
+                      {cred.label}
+                    </span>
                     <span className="text-text-subtle font-mono text-[10px] truncate block">
                       {cred.email}
                     </span>
@@ -284,7 +256,7 @@ export const LoginPage: React.FC = () => {
                   <span className="font-mono text-text-subtle text-[10px] bg-bg border border-border/40 px-1.5 py-0.5 rounded flex-shrink-0">
                     {cred.password}
                   </span>
-                </button>
+                </div>
               );
             })}
           </div>
