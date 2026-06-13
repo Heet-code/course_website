@@ -6,6 +6,7 @@ export const registerSchema = z.object({
     email: z.string().email('Invalid email address'),
     password: z.string().min(6, 'Password must be at least 6 characters'),
     role: z.enum(['student', 'instructor', 'admin']).default('student'),
+    turnstileToken: z.string().optional(),
   }),
 });
 
@@ -14,5 +15,6 @@ export const loginSchema = z.object({
     email: z.string().email('Invalid email address'),
     password: z.string().min(1, 'Password is required'),
     selectedRole: z.enum(['student', 'instructor', 'admin']),
+    turnstileToken: z.string().optional(),
   }),
 });

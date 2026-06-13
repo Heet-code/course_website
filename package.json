@@ -24,6 +24,7 @@
     "vite": "^8.0.12"
   },
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.5.3",
     "@playhtml/common": "^0.7.0",
     "@playhtml/react": "^0.11.0",
     "bcryptjs": "^3.0.3",

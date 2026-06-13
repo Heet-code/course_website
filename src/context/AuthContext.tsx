@@ -6,8 +6,8 @@ import { initializeStorage } from '../lib/storage';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string, selectedRole?: UserRole) => Promise<{ success: boolean; user?: User; error?: string }>;
-  signup: (name: string, email: string, role?: UserRole) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password: string, selectedRole?: UserRole, turnstileToken?: string) => Promise<{ success: boolean; user?: User; error?: string }>;
+  signup: (name: string, email: string, role?: UserRole, turnstileToken?: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   updateUser: (updatedUser: User) => void;
 }
@@ -36,10 +36,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     init();
   }, []);
 
-  const login = async (email: string, password: string, selectedRole?: UserRole) => {
+  const login = async (email: string, password: string, selectedRole?: UserRole, turnstileToken?: string) => {
     setLoading(true);
     try {
-      const res = await mockAuth.login(email, password, selectedRole);
+      const res = await mockAuth.login(email, password, selectedRole, turnstileToken);
       if (res.success && res.user) {
         setUser(res.user);
         // Sync in local storage for local templates routing
@@ -54,10 +54,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signup = async (name: string, email: string, role: UserRole = 'student') => {
+  const signup = async (name: string, email: string, role: UserRole = 'student', turnstileToken?: string) => {
     setLoading(true);
     try {
-      const res = await mockAuth.signup(name, email, role);
+      const res = await mockAuth.signup(name, email, role, turnstileToken);
       if (res.success && res.user) {
         setUser(res.user);
         localStorage.setItem('lms_session', JSON.stringify(res.user));

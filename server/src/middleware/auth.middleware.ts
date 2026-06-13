@@ -44,4 +44,45 @@ export const authenticate: RequestHandler = asyncHandler(
   }
 );
 
+export const verifyTurnstile: RequestHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const isProd = env.NODE_ENV === 'production';
+    const token = req.body?.turnstileToken;
+
+    // In production, we require the token. In development, we allow bypass if not provided.
+    if (isProd && !token) {
+      throw new ApiError(400, 'Security verification token (Turnstile) is required');
+    }
+
+    if (!token) {
+      return next();
+    }
+
+    try {
+      const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          secret: env.TURNSTILE_SECRET_KEY,
+          response: token,
+          remoteip: req.ip,
+        }),
+      });
+
+      const data = await response.json() as { success: boolean; 'error-codes'?: string[] };
+
+      if (!data.success) {
+        throw new ApiError(400, `Security verification failed: ${data['error-codes']?.join(', ') || 'invalid token'}`);
+      }
+
+      next();
+    } catch (err: any) {
+      if (err instanceof ApiError) throw err;
+      throw new ApiError(500, `Failed to verify security token: ${err.message}`);
+    }
+  }
+);
+
 export default authenticate;

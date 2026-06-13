@@ -81,11 +81,11 @@ const mockGetCurrentUser = (): User | null => {
 
 export const mockAuth = {
   // Login method
-  async login(email: string, password: string, selectedRole: UserRole = 'student'): Promise<LoginResponse> {
+  async login(email: string, password: string, selectedRole: UserRole = 'student', turnstileToken?: string): Promise<LoginResponse> {
     try {
       const responseUser = await safeRequest<User>('/auth/login', {
         method: 'POST',
-        body: JSON.stringify({ email, password, selectedRole }),
+        body: JSON.stringify({ email, password, selectedRole, turnstileToken }),
       }, async () => {
         const fallbackRes = await mockLogin(email, password);
         if (!fallbackRes.success || !fallbackRes.user) {
@@ -101,11 +101,11 @@ export const mockAuth = {
   },
 
   // Signup method (creates student account)
-  async signup(name: string, email: string, role: UserRole = 'student'): Promise<LoginResponse> {
+  async signup(name: string, email: string, role: UserRole = 'student', turnstileToken?: string): Promise<LoginResponse> {
     try {
       const responseUser = await safeRequest<User>('/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ name, email, password: email.split('@')[0] + '123', role }),
+        body: JSON.stringify({ name, email, password: email.split('@')[0] + '123', role, turnstileToken }),
       }, async () => {
         const fallbackRes = await mockSignup(name, email, role);
         if (!fallbackRes.success || !fallbackRes.user) {

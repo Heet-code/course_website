@@ -16,6 +16,7 @@ const envSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
   COOKIE_DOMAIN: z.string().default('localhost'),
+  TURNSTILE_SECRET_KEY: z.string().default('0x4AAAAAAADkAyAL2zbM4TIIBHGCRZFLneqQ'),
 });
 
 const parsed = envSchema.safeParse(process.env);

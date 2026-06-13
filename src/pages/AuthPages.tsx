@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { useAuth } from '../hooks/useAuth';
 import { Input, Button, Badge } from '../components/ui';
 import { AuthLayout } from '../components/layout';
@@ -48,6 +49,7 @@ export const LoginPage: React.FC = () => {
   const [password, setPassword] = useState(ROLE_CREDENTIALS.student.password);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string>('');
 
   const selectRole = useCallback((role: UserRole) => {
     setSelectedRole(role);
@@ -76,7 +78,7 @@ export const LoginPage: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    const res = await login(email, password, selectedRole);
+    const res = await login(email, password, selectedRole, turnstileToken);
     setLoading(false);
 
     if (res.success && res.user) {
@@ -203,7 +205,16 @@ export const LoginPage: React.FC = () => {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" loading={loading}>
+        <div className="flex justify-center py-2">
+          <Turnstile
+            siteKey="0x4AAAAAAADkAyIjkToDthEhS"
+            onSuccess={(token) => setTurnstileToken(token)}
+            onError={() => setTurnstileToken('')}
+            onExpire={() => setTurnstileToken('')}
+          />
+        </div>
+
+        <Button type="submit" className="w-full" loading={loading} disabled={!turnstileToken}>
           Sign In as {ROLE_CREDENTIALS[selectedRole].label}
         </Button>
 
@@ -303,6 +314,7 @@ export const SignupPage: React.FC = () => {
   const [role, setRole] = useState<'student' | 'instructor'>('student');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string>('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -318,7 +330,7 @@ export const SignupPage: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    const res = await signup(name, email, role);
+    const res = await signup(name, email, role, turnstileToken);
     setLoading(false);
 
     if (res.success) {
@@ -398,7 +410,16 @@ export const SignupPage: React.FC = () => {
           </div>
         </div>
 
-        <Button type="submit" className="w-full" loading={loading}>
+        <div className="flex justify-center py-2">
+          <Turnstile
+            siteKey="0x4AAAAAAADkAyIjkToDthEhS"
+            onSuccess={(token) => setTurnstileToken(token)}
+            onError={() => setTurnstileToken('')}
+            onExpire={() => setTurnstileToken('')}
+          />
+        </div>
+
+        <Button type="submit" className="w-full" loading={loading} disabled={!turnstileToken}>
           Create Account
         </Button>
 
