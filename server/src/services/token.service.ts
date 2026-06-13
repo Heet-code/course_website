@@ -18,7 +18,7 @@ export const setTokenCookies = (res: Response, accessToken: string, refreshToken
   const cookieOptions: CookieOptions = {
     httpOnly: true,
     secure: isProd,
-    sameSite: 'lax',
+    sameSite: isProd ? 'none' : 'lax',
     // In production, specify cookie domain. Localhost should omit domain to avoid cross-domain issues on local ports
     domain: isProd ? env.COOKIE_DOMAIN : undefined,
     path: '/',
@@ -42,7 +42,7 @@ export const clearTokenCookies = (res: Response) => {
   const cookieOptions: CookieOptions = {
     httpOnly: true,
     secure: isProd,
-    sameSite: 'lax',
+    sameSite: isProd ? 'none' : 'lax',
     domain: isProd ? env.COOKIE_DOMAIN : undefined,
     path: '/',
   };

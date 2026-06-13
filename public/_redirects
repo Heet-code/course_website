@@ -1,5 +1,0 @@
-# Proxy API requests to Render backend
-/api/* https://skillcohort-api.onrender.com/api/:splat 200
-
-# Fallback all other routes to index.html for React Router SPA behavior
-/* /index.html 200
