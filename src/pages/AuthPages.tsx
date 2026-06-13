@@ -45,13 +45,18 @@ export const LoginPage: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const [selectedRole, setSelectedRole] = useState<UserRole>('student');
-  const [email, setEmail] = useState(ROLE_CREDENTIALS.student.email);
-  const [password, setPassword] = useState(ROLE_CREDENTIALS.student.password);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
 
   const selectRole = useCallback((role: UserRole) => {
+    setSelectedRole(role);
+    setError(null);
+  }, []);
+
+  const handleAutofill = useCallback((role: UserRole) => {
     setSelectedRole(role);
     setEmail(ROLE_CREDENTIALS[role].email);
     setPassword(ROLE_CREDENTIALS[role].password);
@@ -242,7 +247,7 @@ export const LoginPage: React.FC = () => {
                 <button
                   key={role}
                   type="button"
-                  onClick={() => selectRole(role)}
+                  onClick={() => handleAutofill(role)}
                   aria-label={`Autofill ${cred.label} demo credentials`}
                   className={`
                     w-full flex items-center gap-2.5 p-2 rounded-card transition-all duration-150 text-left
