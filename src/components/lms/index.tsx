@@ -202,13 +202,13 @@ export const CourseHero: React.FC<CourseHeroProps> = ({
       {/* Info Column */}
       <div className="flex-1 space-y-4">
         <div className="flex flex-wrap items-center gap-2 w-full">
-          <Badge variant="secondary">{course.category}</Badge>
-          <Badge variant={course.difficulty === 'Advanced' ? 'danger' : course.difficulty === 'Intermediate' ? 'secondary' : 'primary'}>
-            {course.difficulty}
+          <Badge variant="secondary">{course.category || 'General'}</Badge>
+          <Badge variant="primary">
+            {course.level || 'Beginner'}
           </Badge>
-          {course.certificateAvailable && (
-            <Badge variant="success">Certificate Available</Badge>
-          )}
+          <Badge variant={course.type === 'pdf' ? 'danger' : 'success'}>
+            {course.type === 'pdf' ? 'PDF' : course.type === 'book' ? 'Book' : 'Guide'}
+          </Badge>
         </div>
 
         <h1 className="text-2xl sm:text-3xl font-black text-text-main tracking-tight leading-tight">
@@ -221,41 +221,40 @@ export const CourseHero: React.FC<CourseHeroProps> = ({
 
         {/* Course specs list */}
         <div className="flex flex-wrap items-center gap-6 text-xs text-text-subtle font-bold uppercase">
-          <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-secondary" /> Duration: {course.duration}</span>
-          <span className="flex items-center gap-1.5"><Star className="h-4 w-4 text-warning fill-warning" /> Rating: {course.rating} / 5.0</span>
-          <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-secondary" /> Instructor: {course.instructorName}</span>
+          <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-secondary" /> Read Time: {course.readingTime || 30} mins</span>
+          <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-secondary" /> Author: {course.author || course.instructorName || 'The Learning Collective'}</span>
         </div>
 
         <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
-          {enrolled ? (
-            <div className="w-full sm:max-w-xs space-y-2">
-              <ProgressBar progress={progress} />
+          <div className="flex items-center gap-4 w-full sm:w-auto">
+            <Button 
+              variant="primary" 
+              size="lg"
+              className="flex-1 sm:flex-none"
+              onClick={onEnroll}
+            >
+              Read Online
+            </Button>
+            {course.fileUrl ? (
               <Button 
-                variant="secondary" 
-                className="w-full" 
-                onClick={onEnroll}
-              >
-                Resume Syllabus Player
-              </Button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-4">
-              <div className="text-left">
-                <span className="text-xs font-bold text-text-subtle block uppercase tracking-wider">Tuition Fee</span>
-                <span className="text-2xl font-black text-text-main">
-                  {course.isFree ? 'FREE' : `$${course.price?.toFixed(2)}`}
-                </span>
-              </div>
-              <Button 
-                variant="primary" 
+                variant="outline" 
                 size="lg"
-                loading={loadingEnroll}
-                onClick={onEnroll}
+                className="flex-1 sm:flex-none"
+                onClick={() => window.open(course.fileUrl, '_blank')}
               >
-                {course.isFree ? 'Register Free' : 'Purchase Access'}
+                Download PDF
               </Button>
-            </div>
-          )}
+            ) : (
+              <Button 
+                variant="outline" 
+                size="lg"
+                disabled
+                className="flex-1 sm:flex-none opacity-50 cursor-not-allowed"
+              >
+                PDF coming soon
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 

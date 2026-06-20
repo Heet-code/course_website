@@ -201,7 +201,7 @@ export const LandingPage: React.FC = () => {
         <PublicNavbar />
         
         {/* 1. HERO SECTION */}
-        <section className="relative px-6 py-16 sm:py-24 max-w-7xl mx-auto text-left w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <section className="relative px-6 py-8 sm:py-16 max-w-7xl mx-auto text-left w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           <div className="lg:col-span-7 space-y-6 z-10">
             <PageEnter.Item delay={0.15}>
               <Badge variant="primary" className="border-primary/30">Next Generation Learning</Badge>
@@ -210,13 +210,18 @@ export const LandingPage: React.FC = () => {
             <div className="space-y-2">
               <PageEnter.Item delay={0.25} y={15}>
                 <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-text-main tracking-tight leading-[1.05]">
-                  <TextEffect variant="blur-in" per="word" delay={0.1}>Master new skills with</TextEffect>
+                  <TextEffect variant="blur-in" per="word" delay={0.1}>Learn practical skills</TextEffect>
                 </span>
               </PageEnter.Item>
               <PageEnter.Item delay={0.35} y={15}>
                 <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-text-main tracking-tight leading-[1.05]">
+                  <TextEffect variant="blur-in" per="word" delay={0.1}>through books, PDFs,</TextEffect>
+                </span>
+              </PageEnter.Item>
+              <PageEnter.Item delay={0.45} y={15}>
+                <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-text-main tracking-tight leading-[1.05]">
                   <span className="text-secondary underline decoration-primary decoration-4">
-                    <TextEffect variant="scale-up" per="char" delay={0.55}>Bento Grid Layouts</TextEffect>
+                    <TextEffect variant="scale-up" per="char" delay={0.55}>and guided resources</TextEffect>
                   </span>
                 </span>
               </PageEnter.Item>
@@ -224,20 +229,20 @@ export const LandingPage: React.FC = () => {
 
             <PageEnter.Item delay={0.45}>
               <p className="text-base sm:text-lg text-text-muted leading-relaxed max-w-xl font-normal">
-                A production-ready platform prioritizing clear typography, structural spacing, and WCAG-compliant design aesthetics.
+                The Learning Collective helps you start learning now with practical guides, PDF notes, and online resources. Live classes and structured cohorts will launch soon.
               </p>
             </PageEnter.Item>
 
             <PageEnter.Item delay={0.55} scale={0.97}>
               <div className="flex flex-wrap gap-4 pt-2">
                 <MagneticButton>
-                  <Button size="lg" onClick={() => { trackSignupClick(); navigate(getStartedPath); }} className="watermelon-card-glow-pink">
-                    Get Started Free
+                  <Button size="lg" onClick={() => { trackEvent('page_view_manual', { metadata: { clicked: 'browse_library' } }); navigate('/courses'); }} className="watermelon-card-glow-pink">
+                    Explore Library
                   </Button>
                 </MagneticButton>
                 <MagneticButton>
-                  <Button size="lg" variant="outline" onClick={() => { trackEvent('page_view_manual', { metadata: { clicked: 'browse_courses' } }); navigate('/courses'); }} className="border-border hover:border-secondary transition-colors">
-                    Browse Courses
+                  <Button size="lg" variant="outline" onClick={() => { document.getElementById('waitlist-form')?.scrollIntoView({ behavior: 'smooth' }) }} className="border-border hover:border-secondary transition-colors">
+                    Join Waitlist
                   </Button>
                 </MagneticButton>
               </div>
@@ -245,13 +250,13 @@ export const LandingPage: React.FC = () => {
             
             <div className="pt-6 border-t border-border flex flex-wrap items-center gap-6 text-xs text-text-subtle font-bold uppercase tracking-wider overflow-hidden">
               <PageEnter.Item delay={0.65} className="inline-block" y={10}>
-                <span>✓ 10,000+ Enrolled Students</span>
+                <span>✓ Practical PDF resources</span>
               </PageEnter.Item>
               <PageEnter.Item delay={0.75} className="inline-block" y={10}>
-                <span>✓ WCAG 2.2 AA Accessible</span>
+                <span>✓ Beginner-friendly guides</span>
               </PageEnter.Item>
               <PageEnter.Item delay={0.85} className="inline-block" y={10}>
-                <span>✓ Verified Instructor Syllabus</span>
+                <span>✓ Live classes coming soon</span>
               </PageEnter.Item>
             </div>
           </div>
@@ -641,11 +646,11 @@ export const CoursesPage: React.FC = () => {
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
         <AnimatedBackground />
         <PublicNavbar />
-        <div className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full text-left">
+        <div className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 w-full text-left">
           <div className="space-y-6">
             <div>
-              <h1 className="text-3xl font-black text-text-main tracking-tight">Courses Catalog</h1>
-              <p className="text-xs text-text-muted mt-1">Filter, search, and register for technical modules.</p>
+              <h1 className="text-3xl font-black text-text-main tracking-tight">Learning Library</h1>
+              <p className="text-xs text-text-muted mt-1">Read practical books, PDF notes, and guided resources online. Live classes are coming soon.</p>
             </div>
             
             <div className="space-y-4">
@@ -672,8 +677,8 @@ export const CoursesPage: React.FC = () => {
               <CourseGrid courses={courses} />
             ) : (
               <EmptyState 
-                title="No Courses Found" 
-                description="No matches found in the catalog. Try resetting search strings or category filters."
+                title="No Resources Found" 
+                description="No matches found in the library. Try resetting search strings or category filters."
                 action={
                   <Button onClick={() => { setSearch(''); setCategory(''); setDifficulty(''); setPriceType(''); }}>
                     Reset Filters
@@ -783,7 +788,7 @@ export const CourseDetailsPage: React.FC = () => {
         <AnimatedBackground />
         <PublicNavbar />
         
-        <div className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full text-left">
+        <div className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 w-full text-left">
           <CourseHero 
             course={course}
             enrolled={!!enrollment}
@@ -823,7 +828,7 @@ export const CourseDetailsPage: React.FC = () => {
               {/* What you will learn */}
               <Card className="bg-surface border border-border p-6">
                 <h3 className="text-base font-extrabold text-text-main uppercase tracking-wider mb-4">
-                  What you will learn in this course
+                  What you will learn
                 </h3>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs text-text-muted font-semibold">
                   {course.outcomes && course.outcomes.length > 0 ? (
@@ -834,10 +839,9 @@ export const CourseDetailsPage: React.FC = () => {
                     ))
                   ) : (
                     <>
-                      <li className="flex gap-2"><Check className="h-4.5 w-4.5 text-success flex-shrink-0" /> Hands-on real-world building projects</li>
-                      <li className="flex gap-2"><Check className="h-4.5 w-4.5 text-success flex-shrink-0" /> High-quality video modules & references</li>
-                      <li className="flex gap-2"><Check className="h-4.5 w-4.5 text-success flex-shrink-0" /> Self-paced curriculum scheduling</li>
-                      <li className="flex gap-2"><Check className="h-4.5 w-4.5 text-success flex-shrink-0" /> Certification credentials validated on LinkedIn</li>
+                      <li className="flex gap-2"><Check className="h-4.5 w-4.5 text-success flex-shrink-0" /> Practical insights</li>
+                      <li className="flex gap-2"><Check className="h-4.5 w-4.5 text-success flex-shrink-0" /> High-quality materials</li>
+                      <li className="flex gap-2"><Check className="h-4.5 w-4.5 text-success flex-shrink-0" /> Self-paced learning</li>
                     </>
                   )}
                 </ul>
@@ -848,25 +852,24 @@ export const CourseDetailsPage: React.FC = () => {
                 <div className="flex justify-between items-center mb-6">
                   <div>
                     <h3 className="text-base font-extrabold text-text-main uppercase tracking-wider">
-                      Course Curriculum
+                      Table of Contents
                     </h3>
                     <span className="text-[10px] text-text-subtle font-semibold">
-                      {course.modules.length} Modules • self paced
+                      {course.modules?.length || 0} Chapters
                     </span>
                   </div>
                 </div>
   
                 <div className="space-y-3">
-                  {course.modules.map((mod) => (
+                  {course.modules?.map((mod) => (
                     <div 
                       key={mod.id}
                       className="flex items-center justify-between p-3.5 bg-surface-muted/50 border border-border/65 rounded-ctrl text-xs font-semibold"
                     >
                       <div className="flex items-center gap-3">
-                        <Play className="h-3.5 w-3.5 text-secondary flex-shrink-0" />
+                        <BookOpen className="h-3.5 w-3.5 text-secondary flex-shrink-0" />
                         <span className="text-text-muted">{mod.title}</span>
                       </div>
-                      <span className="text-[10px] text-text-subtle flex items-center gap-1.5">{mod.lessons.length} Lessons</span>
                     </div>
                   ))}
                 </div>
@@ -876,31 +879,21 @@ export const CourseDetailsPage: React.FC = () => {
             {/* Right details sidebar actions */}
             <div className="lg:col-span-4 space-y-6">
               {/* Pricing access card */}
+              {/* Live Classes Waitlist card */}
               <Card className="bg-surface border border-border p-6 text-left space-y-5">
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-xs text-text-muted font-bold">Course Price</span>
+                  <span className="text-xs text-text-muted font-bold">Live Classes</span>
                   <span className="text-xl font-black text-text-main">
-                    {course.isFree ? 'FREE' : (
-                      <span className="flex items-center gap-1.5">
-                        {course.originalPrice && <span className="line-through text-text-subtle text-xs font-normal">${course.originalPrice}</span>}
-                        <span>${course.price}</span>
-                      </span>
-                    )}
+                    Coming Soon
                   </span>
+                  <p className="text-xs text-text-muted mt-2">Live classes and interactive cohorts for this topic are coming soon. Join the waitlist to be notified.</p>
                 </div>
-                <Button 
-                  variant={enrollment ? 'secondary' : 'primary'} 
-                  className="w-full mt-2"
-                  loading={loadingEnroll}
-                  onClick={handleEnroll}
-                >
-                  {enrollment ? 'Resume Syllabus' : (course.isFree ? 'Enroll Free' : 'Purchase Access')}
-                </Button>
+                <WaitlistForm sourcePage={`Resource: ${course.title}`} />
               </Card>
   
               {/* Instructor card */}
               <Card className="bg-surface border border-border p-5 text-center space-y-4">
-                <h4 className="text-xs font-bold text-text-subtle uppercase tracking-wider">Course Instructor</h4>
+                <h4 className="text-xs font-bold text-text-subtle uppercase tracking-wider">Author</h4>
                 <div className="flex flex-col items-center gap-2 pt-2">
                   <img 
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150" 
@@ -1334,6 +1327,54 @@ export const FaqPage: React.FC = () => {
             />
           </ScrollReveal>
         </div>
+        <Footer />
+      </div>
+    </PageTransition>
+  );
+};
+
+export const TermsPage: React.FC = () => {
+  return (
+    <PageTransition>
+      <SEO title="Terms of Service — The Learning Collective" />
+      <div className="flex flex-col min-h-screen bg-bg">
+        <PublicNavbar />
+        <main className="flex-grow max-w-4xl mx-auto px-6 py-24 text-left">
+          <h1 className="text-3xl font-black text-text-main mb-6">Terms of Service</h1>
+          <p className="text-text-muted leading-relaxed mb-4">Effective Date: {new Date().getFullYear()}</p>
+          <div className="space-y-6 text-sm text-text-muted leading-relaxed">
+            <p>Welcome to The Learning Collective. By accessing our platform, you agree to these terms.</p>
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">1. Acceptance of Terms</h2>
+            <p>By using our services, you confirm that you accept these terms of use and that you agree to comply with them.</p>
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">2. Accessing the Platform</h2>
+            <p>We do not guarantee that our site, or any content on it, will always be available or be uninterrupted.</p>
+            <p className="mt-8 italic">This is a placeholder Terms of Service page. A full legal document will be provided later.</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    </PageTransition>
+  );
+};
+
+export const PrivacyPage: React.FC = () => {
+  return (
+    <PageTransition>
+      <SEO title="Privacy Policy — The Learning Collective" />
+      <div className="flex flex-col min-h-screen bg-bg">
+        <PublicNavbar />
+        <main className="flex-grow max-w-4xl mx-auto px-6 py-24 text-left">
+          <h1 className="text-3xl font-black text-text-main mb-6">Privacy Policy</h1>
+          <p className="text-text-muted leading-relaxed mb-4">Effective Date: {new Date().getFullYear()}</p>
+          <div className="space-y-6 text-sm text-text-muted leading-relaxed">
+            <p>At The Learning Collective, we respect your privacy and are committed to protecting your personal data.</p>
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">1. Data We Collect</h2>
+            <p>We may collect, use, store and transfer different kinds of personal data about you, including identity and contact data.</p>
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">2. How We Use Your Data</h2>
+            <p>We will only use your personal data when the law allows us to. Most commonly, we will use your personal data to provide our services to you.</p>
+            <p className="mt-8 italic">This is a placeholder Privacy Policy page. A full legal document will be provided later.</p>
+          </div>
+        </main>
         <Footer />
       </div>
     </PageTransition>

@@ -117,11 +117,11 @@ export const AnimatedBentoPreview: React.FC = () => {
               <span className="text-[9px] font-bold text-text-subtle uppercase tracking-wide">Next Up</span>
               <div className="flex gap-2 items-start">
                 <div className="p-1 bg-secondary/15 rounded text-secondary flex-shrink-0">
-                  <BookOpen className="h-3 w-3" />
+                  <BookOpen className="h-4 w-4 text-primary" />
                 </div>
-                <div className="min-w-0">
-                  <h6 className="text-[10px] font-extrabold text-text-main leading-tight truncate">Advanced Grid Layouts</h6>
-                  <span className="text-[8px] text-text-subtle font-semibold">Lesson 3 of 12</span>
+                <div className="flex-1">
+                  <div className="h-4 w-3/4 bg-border/50 rounded animate-pulse" />
+                  <div className="h-3 w-1/2 bg-border/30 rounded mt-2 animate-pulse" />
                 </div>
               </div>
             </div>
@@ -171,9 +171,9 @@ export const AnimatedBentoPreview: React.FC = () => {
           </div>
 
           <span className="text-[8px] font-black text-secondary uppercase tracking-wider block">Course Active</span>
-          <h5 className="text-[11px] sm:text-xs font-black text-text-main mt-0.5 mb-1.5 leading-snug">
-            SaaS Dashboard Design
-          </h5>
+          <div className="text-xs font-bold text-text-main leading-tight mt-0.5 mb-1.5">
+            MVP Engineering<br />Blueprint
+          </div>
 
           <div className="flex items-center justify-between text-[9px] text-text-subtle font-bold uppercase mb-1">
             <span>Progress</span>

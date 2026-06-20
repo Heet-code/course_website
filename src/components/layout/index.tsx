@@ -29,7 +29,7 @@ export const PublicNavbar: React.FC = () => {
 
 
   const links = [
-    { label: 'Courses', path: '/courses' },
+    { label: 'Library', path: '/courses' },
     { label: 'Pricing', path: '/pricing' },
     { label: 'About', path: '/about' },
     { label: 'Contact', path: '/contact' },
@@ -436,12 +436,10 @@ export const Footer: React.FC = () => {
         </div>
         
         <div className="text-left">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-text-main mb-3">Courses</h4>
+          <h4 className="text-xs font-bold uppercase tracking-wider text-text-main mb-3">Library</h4>
           <ul className="space-y-2 text-xs text-text-muted font-semibold">
-            <li><Link to="/courses" className="hover:text-secondary">Web Development</Link></li>
-            <li><Link to="/courses" className="hover:text-secondary">Data Science Essentials</Link></li>
-            <li><Link to="/courses" className="hover:text-secondary">Advanced UI/UX Bento Design</Link></li>
-            <li><Link to="/courses" className="hover:text-secondary">Mobile Dev with Expo</Link></li>
+            <li><Link to="/courses" className="hover:text-secondary">Browse Library</Link></li>
+            <li><span className="text-text-subtle">Live Classes (Coming Soon)</span></li>
           </ul>
         </div>
 
@@ -458,8 +456,6 @@ export const Footer: React.FC = () => {
           <h4 className="text-xs font-bold uppercase tracking-wider text-text-main mb-3">Support</h4>
           <ul className="space-y-2 text-xs text-text-muted font-semibold">
             <li><Link to="/faq" className="hover:text-secondary">FAQs & Help</Link></li>
-            <li><span className="text-text-subtle">Student Helpdesk</span></li>
-            <li><span className="text-text-subtle">Developer API</span></li>
           </ul>
         </div>
       </div>
@@ -469,8 +465,8 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-text-subtle font-semibold gap-4">
         <span>© {new Date().getFullYear()} The Learning Collective. All rights reserved.</span>
         <div className="flex gap-4">
-          <span className="hover:text-secondary cursor-pointer">Terms of Service</span>
-          <span className="hover:text-secondary cursor-pointer">Privacy Policy</span>
+          <Link to="/terms" className="hover:text-secondary cursor-pointer">Terms of Service</Link>
+          <Link to="/privacy" className="hover:text-secondary cursor-pointer">Privacy Policy</Link>
         </div>
       </div>
     </footer>

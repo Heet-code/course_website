@@ -1,6 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Search, Filter, AlertCircle, X, ChevronDown, Check, Loader2 } from 'lucide-react';
 
+export * from '../animations/MagneticButton';
+export * from '../animations/PageTransition';
+export * from '../animations/ScrollReveal';
+export * from '../animations/MotionPrimitives';
+export * from '../animations/PageEnter';
+export * from './WaitlistForm';
+
 // ==========================================
 // 1. BUTTON
 // ==========================================

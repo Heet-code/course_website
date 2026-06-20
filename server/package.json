@@ -8,7 +8,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "nodemon --watch src -e ts --exec ts-node src/server.ts",
-    "seed": "ts-node src/seed/seed.ts"
+    "seed": "ts-node src/seed/seed.ts",
+    "seed:resources": "ts-node src/seed/seedResources.ts"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",

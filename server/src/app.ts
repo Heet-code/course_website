@@ -21,6 +21,7 @@ import certificateRoutes from './routes/certificate.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import contactRoutes from './routes/contact.routes';
 import analyticsRoutes from './routes/analytics.routes';
+import newsletterRoutes from './routes/newsletter.routes';
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.use('/api/certificates', certificateRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/newsletter', newsletterRoutes);
 
 // Catch-all 404
 app.use((req, res, next) => {

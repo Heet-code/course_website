@@ -10,7 +10,10 @@ import './style.css';
 // Public Pages
 import { 
   LandingPage, CoursesPage, CourseDetailsPage, PricingPage, 
-  AboutPage, ContactPage, FaqPage 
+  AboutPage,  ContactPage,
+  FaqPage,
+  TermsPage,
+  PrivacyPage
 } from './pages/PublicPages';
 
 // Auth Pages
@@ -100,6 +103,8 @@ const App = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/faq" element={<FaqPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
       </Route>
 
       {/* Authentication Routes */}

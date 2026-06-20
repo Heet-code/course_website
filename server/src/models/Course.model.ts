@@ -39,7 +39,15 @@ export interface ICourse extends Document {
   fullDescription?: string;
   category: string;
   difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  duration: string;
+  level?: string;
+  duration?: string;
+  type?: 'course' | 'book' | 'pdf' | 'guide';
+  accessType?: 'read_online' | 'download_pdf' | 'external_link' | 'enroll';
+  readingTime?: number;
+  author?: string;
+  fileUrl?: string;
+  externalUrl?: string;
+  liveClassStatus?: 'active' | 'coming_soon';
   isFree: boolean;
   price: number;
   originalPrice?: number;
@@ -98,7 +106,15 @@ const CourseSchema = new Schema<ICourse>(
     fullDescription: { type: String },
     category: { type: String, required: true },
     difficulty: { type: String, enum: ['Beginner', 'Intermediate', 'Advanced'], default: 'Beginner' },
-    duration: { type: String, required: true },
+    level: { type: String },
+    duration: { type: String, default: 'Self-paced' },
+    type: { type: String, enum: ['course', 'book', 'pdf', 'guide'], default: 'course' },
+    accessType: { type: String, enum: ['read_online', 'download_pdf', 'external_link', 'enroll'], default: 'enroll' },
+    readingTime: { type: Number },
+    author: { type: String },
+    fileUrl: { type: String },
+    externalUrl: { type: String },
+    liveClassStatus: { type: String, enum: ['active', 'coming_soon'], default: 'active' },
     isFree: { type: Boolean, default: true },
     price: { type: Number, default: 0 },
     originalPrice: { type: Number },
