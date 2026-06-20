@@ -9,22 +9,67 @@ import { SEO } from '../components/seo/SEO';
 import { trackLoginSuccess, trackRoleSelected, trackSignupClick } from '../lib/analytics';
 import type { UserRole } from '../types';
 
-const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '';
+const isValidTurnstileKey = Boolean(TURNSTILE_SITE_KEY && TURNSTILE_SITE_KEY.length > 5 && !TURNSTILE_SITE_KEY.includes('1x0000'));
 
-const useTurnstileBypass = () => {
-  const [turnstileSupported, setTurnstileSupported] = useState(true);
+const SafeTurnstile: React.FC<{ onToken: (token: string) => void }> = React.memo(({ onToken }) => {
+  const [timeoutError, setTimeoutError] = useState(false);
+  const [key, setKey] = useState(0);
+
+  const handleSuccess = useCallback((token: string) => {
+    setTimeoutError(false);
+    onToken(token);
+  }, [onToken]);
+
+  const handleError = useCallback(() => {
+    setTimeoutError(true);
+    onToken('');
+  }, [onToken]);
+
+  const handleExpire = useCallback(() => {
+    onToken('');
+  }, [onToken]);
+
+  const resetTurnstile = useCallback(() => {
+    setTimeoutError(false);
+    setKey(prev => prev + 1);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (!(window as any).turnstile) {
-        setTurnstileSupported(false);
-      }
-    }, 3000);
+      setTimeoutError(true);
+    }, 15000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [key]);
 
-  return turnstileSupported;
-};
+  if (!isValidTurnstileKey) {
+    return (
+      <div className="p-3 bg-warning/10 text-warning border border-warning/30 rounded-ctrl text-xs font-semibold text-center my-2">
+        Security verification is temporarily unavailable. Please try again later.
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex flex-col items-center justify-center py-2">
+      <Turnstile
+        key={key}
+        siteKey={TURNSTILE_SITE_KEY}
+        onSuccess={handleSuccess}
+        onError={handleError}
+        onExpire={handleExpire}
+      />
+      {timeoutError && (
+        <div className="text-center space-y-2 mt-2">
+          <p className="text-[10px] text-danger font-semibold">Security check is taking too long.</p>
+          <button type="button" onClick={resetTurnstile} className="text-[10px] font-bold text-secondary hover:underline focus:outline-none">
+            Refresh Challenge
+          </button>
+        </div>
+      )}
+    </div>
+  );
+});
 
 // ==========================================
 // ROLE CREDENTIAL MAP
@@ -69,8 +114,6 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
-  const [turnstileKey, setTurnstileKey] = useState<number>(0);
-  const turnstileSupported = useTurnstileBypass();
 
   const selectRole = useCallback((role: UserRole) => {
     trackRoleSelected(role);
@@ -114,7 +157,6 @@ export const LoginPage: React.FC = () => {
       else navigate('/student/dashboard');
     } else {
       setError(res.error || 'Authentication credentials invalid.');
-      setTurnstileKey(prev => prev + 1);
       setTurnstileToken('');
     }
   };
@@ -230,17 +272,9 @@ export const LoginPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex justify-center py-2">
-          <Turnstile
-            key={turnstileKey}
-            siteKey={TURNSTILE_SITE_KEY}
-            onSuccess={(token) => setTurnstileToken(token)}
-            onError={() => setTurnstileToken('')}
-            onExpire={() => setTurnstileToken('')}
-          />
-        </div>
+        <SafeTurnstile onToken={setTurnstileToken} />
 
-        <Button type="submit" className="w-full" loading={loading} disabled={!turnstileToken && turnstileSupported}>
+        <Button type="submit" className="w-full" loading={loading} disabled={isValidTurnstileKey ? !turnstileToken : false}>
           Sign In as {ROLE_CREDENTIALS[selectedRole].label}
         </Button>
 
@@ -321,8 +355,6 @@ export const SignupPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
-  const [turnstileKey, setTurnstileKey] = useState<number>(0);
-  const turnstileSupported = useTurnstileBypass();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -350,7 +382,6 @@ export const SignupPage: React.FC = () => {
       }
     } else {
       setError(res.error || 'Registration failed.');
-      setTurnstileKey(prev => prev + 1);
       setTurnstileToken('');
     }
   };
@@ -423,17 +454,9 @@ export const SignupPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex justify-center py-2">
-          <Turnstile
-            key={turnstileKey}
-            siteKey={TURNSTILE_SITE_KEY}
-            onSuccess={(token) => setTurnstileToken(token)}
-            onError={() => setTurnstileToken('')}
-            onExpire={() => setTurnstileToken('')}
-          />
-        </div>
+        <SafeTurnstile onToken={setTurnstileToken} />
 
-        <Button type="submit" className="w-full" loading={loading} disabled={!turnstileToken && turnstileSupported}>
+        <Button type="submit" className="w-full" loading={loading} disabled={isValidTurnstileKey ? !turnstileToken : false}>
           Create Account
         </Button>
 
