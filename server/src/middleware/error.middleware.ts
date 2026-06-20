@@ -11,8 +11,21 @@ export const errorHandler = (
   let error = err;
 
   if (!(error instanceof ApiError)) {
-    const statusCode = error.statusCode || error.status || 500;
-    const message = error.message || 'Internal Server Error';
+    let statusCode = error.statusCode || error.status || 500;
+    let message = error.message || 'Internal Server Error';
+
+    // Intercept MongoDB unique constraint violations safely
+    if (err.name === 'MongoServerError' && err.code === 11000) {
+      statusCode = 400;
+      message = 'A record with that information already exists.';
+    } else if (err.name === 'ValidationError') {
+      statusCode = 400;
+      message = 'Invalid input data.';
+    } else if (statusCode === 500 && env.NODE_ENV === 'production') {
+      // Obscure all internal 500 stack trace messages in production
+      message = 'An unexpected internal error occurred.';
+    }
+
     error = new ApiError(statusCode, message, err.errors || [], err.stack);
   }
 

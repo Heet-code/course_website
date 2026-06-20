@@ -16,7 +16,11 @@ const envSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
   COOKIE_DOMAIN: z.string().default('localhost'),
-  TURNSTILE_SECRET_KEY: z.string().default('0x4AAAAAAADkAyAL2zbM4TIIBHGCRZFLneqQ'),
+  TURNSTILE_SECRET_KEY: z.string().default('1x0000000000000000000000000000000AA'),
+  TURNSTILE_BYPASS: z.string().optional().default('false'),
+  ANALYTICS_HASH_SALT: z.string().default('development_salt_key_only_for_local_use'),
+  RESEND_API_KEY: z.string().optional(),
+  CONTACT_RECEIVER_EMAIL: z.string().email().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
@@ -27,3 +31,8 @@ if (!parsed.success) {
 }
 
 export const env = parsed.data;
+
+if (env.NODE_ENV === 'production' && env.TURNSTILE_BYPASS === 'true') {
+  console.error('❌ CRITICAL SECURITY ERROR: TURNSTILE_BYPASS cannot be true in production!');
+  process.exit(1);
+}

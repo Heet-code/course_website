@@ -8,6 +8,7 @@ import { Course, Module, Lesson, Quiz, Certificate } from '../../types';
 import { Card, Badge, Button, ProgressBar, Input, Textarea, Select } from '../ui';
 import { CourseReaction } from '../playhtml/CourseReaction';
 import { ScrollReveal } from '../animations/ScrollReveal';
+import { trackCourseClick, trackCertificateGenerate } from '../../lib/analytics';
 
 // ==========================================
 // 1. COURSE CARD
@@ -39,6 +40,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, progress, enroll
   };
 
   const handleCardClick = () => {
+    trackCourseClick(course.id);
     if (enrolled) {
       navigate(`/course/${course.id}/learn`);
     } else {
@@ -713,6 +715,7 @@ interface CertificateCardProps {
 
 export const CertificateCard: React.FC<CertificateCardProps> = ({ certificate }) => {
   const handlePrint = () => {
+    trackCertificateGenerate(certificate.courseId);
     window.print();
   };
 

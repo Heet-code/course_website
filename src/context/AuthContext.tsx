@@ -10,6 +10,8 @@ interface AuthContextType {
   signup: (name: string, email: string, role?: UserRole, turnstileToken?: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   updateUser: (updatedUser: User) => void;
+  forgotPassword: (email: string) => Promise<{ success: boolean; message?: string; error?: string }>;
+  resetPassword: (token: string, password: string) => Promise<{ success: boolean; message?: string; error?: string }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -42,8 +44,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await mockAuth.login(email, password, selectedRole, turnstileToken);
       if (res.success && res.user) {
         setUser(res.user);
-        // Sync in local storage for local templates routing
-        localStorage.setItem('lms_session', JSON.stringify(res.user));
+        // Sync in local storage for local templates routing, omitting email
+        const { email: _strippedEmail, ...safeUserStorage } = res.user;
+        localStorage.setItem('lms_session', JSON.stringify(safeUserStorage));
         return { success: true, user: res.user };
       }
       return { success: false, error: res.error || 'Authentication failed.' };
@@ -60,7 +63,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const res = await mockAuth.signup(name, email, role, turnstileToken);
       if (res.success && res.user) {
         setUser(res.user);
-        localStorage.setItem('lms_session', JSON.stringify(res.user));
+        const { email: _strippedEmail, ...safeUserStorage } = res.user;
+        localStorage.setItem('lms_session', JSON.stringify(safeUserStorage));
         return { success: true };
       }
       return { success: false, error: res.error || 'Signup failed.' };
@@ -93,14 +97,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         users[index] = updatedUser;
         localStorage.setItem('lms_users', JSON.stringify(users));
       }
-      localStorage.setItem('lms_session', JSON.stringify(updatedUser));
+      const { email: _strippedEmail, ...safeUserStorage } = updatedUser;
+      localStorage.setItem('lms_session', JSON.stringify(safeUserStorage));
     } catch (err) {
       console.error('Failed to update user profile in storage:', err);
     }
   };
 
+  const forgotPassword = async (email: string) => {
+    return mockAuth.forgotPassword(email);
+  };
+
+  const resetPassword = async (token: string, password: string) => {
+    return mockAuth.resetPassword(token, password);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, login, signup, logout, updateUser, forgotPassword, resetPassword }}>
       {children}
     </AuthContext.Provider>
   );

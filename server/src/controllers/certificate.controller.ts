@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { CertificateService } from '../services/certificate.service';
+import { Course } from '../models/Course.model';
+import { emailService } from '../services/email.service';
 import { ApiResponse } from '../utils/ApiResponse';
 import { ApiError } from '../utils/ApiError';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -13,6 +15,17 @@ export const issueCertificate = asyncHandler(async (req: Request, res: Response)
     req.user._id.toString(),
     req.params.courseId
   );
+
+  // Send certificate issued email
+  const course = await Course.findById(req.params.courseId).select('title');
+  if (course) {
+    emailService.sendCertificateEmail(
+      req.user.email,
+      req.user.name,
+      course.title,
+      certificate.credentialId
+    );
+  }
 
   res
     .status(201)

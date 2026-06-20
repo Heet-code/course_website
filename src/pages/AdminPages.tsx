@@ -23,12 +23,25 @@ export const AdminDashboard: React.FC = () => {
   const [courseApps, setCourseApps] = useState<CourseApproval[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [analytics, setAnalytics] = useState<any>(null);
+
   const loadDashboardData = async () => {
     setLoading(true);
     const u = await mockApi.getUsersList();
     const c = await mockApi.getCourses({ instructorId: '' });
     const ia = await mockApi.getInstructorApprovals();
     const ca = await mockApi.getCourseApprovals();
+
+    try {
+      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const res = await fetch(`${API_URL}/dashboard/admin/analytics-summary`, { credentials: 'include' });
+      if (res.ok) {
+        const json = await res.json();
+        setAnalytics(json.data);
+      }
+    } catch (e) {
+      console.warn('Failed to load analytics summary', e);
+    }
 
     setUsers(u);
     setCourses(c);
@@ -57,6 +70,21 @@ export const AdminDashboard: React.FC = () => {
         <StatsCard title="Pending Approvals" value={instApps.length + courseApps.length} icon={<ShieldCheck className="h-5 w-5" />} />
         <StatsCard title="Monthly Revenue" value={`$${mockAdminStats.monthlyRevenue.toFixed(2)}`} icon={<DollarSign className="h-5 w-5 text-success" />} />
       </div>
+
+      {analytics && (
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xs font-extrabold uppercase tracking-wider text-text-main">Audience Analytics Summary</h3>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 text-left">
+            <StatsCard title="Total Events" value={analytics.totalEvents || 0} icon={<Users className="h-5 w-5" />} />
+            <StatsCard title="Course Clicks" value={analytics.courseCardClicks || 0} icon={<BookOpen className="h-5 w-5" />} />
+            <StatsCard title="Enroll Clicks" value={analytics.enrollClicks || 0} icon={<Award className="h-5 w-5" />} />
+            <StatsCard title="Signups" value={analytics.signupClicks || 0} icon={<ShieldCheck className="h-5 w-5" />} />
+            <StatsCard title="Contact Forms" value={analytics.contactSubmissions || 0} icon={<AlertCircle className="h-5 w-5" />} />
+          </div>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start text-left">
         {/* Instructor applications queue */}

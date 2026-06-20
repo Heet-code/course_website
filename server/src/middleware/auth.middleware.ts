@@ -44,12 +44,39 @@ export const authenticate: RequestHandler = asyncHandler(
   }
 );
 
+export const optionalAuthenticate: RequestHandler = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    const accessToken = req.cookies?.accessToken;
+    if (!accessToken) {
+      return next();
+    }
+    try {
+      const decoded = jwt.verify(accessToken, env.JWT_ACCESS_SECRET) as {
+        id: string;
+        role: string;
+      };
+      const user = await User.findById(decoded.id);
+      if (user) {
+        req.user = user;
+      }
+      next();
+    } catch (err) {
+      // Fail silently for optional auth
+      next();
+    }
+  }
+);
+
 export const verifyTurnstile: RequestHandler = asyncHandler(
   async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     const isProd = env.NODE_ENV === 'production';
     const token = req.body?.turnstileToken;
 
-    // In production, we require the token. In development, we allow bypass if not provided.
+    if (env.TURNSTILE_BYPASS === 'true') {
+      return next();
+    }
+
+    // In production, we require the token.
     if (isProd && !token) {
       throw new ApiError(400, 'Security verification token (Turnstile) is required');
     }
@@ -74,7 +101,11 @@ export const verifyTurnstile: RequestHandler = asyncHandler(
       const data = await response.json() as { success: boolean; 'error-codes'?: string[] };
 
       if (!data.success) {
-        throw new ApiError(400, `Security verification failed: ${data['error-codes']?.join(', ') || 'invalid token'}`);
+        const errors = data['error-codes'] || [];
+        if (errors.includes('invalid-input-response')) {
+          throw new ApiError(400, 'Security verification failed. Please refresh the page and try again.');
+        }
+        throw new ApiError(400, `Security verification failed: ${errors.join(', ') || 'invalid token'}`);
       }
 
       next();

@@ -48,7 +48,7 @@ export const updateCourse = asyncHandler(async (req: Request, res: Response): Pr
     throw new ApiError(401, 'Auth required');
   }
 
-  const course = await CourseService.updateCourse(req.params.id, req.body, req.user._id.toString());
+  const course = await CourseService.updateCourse(req.params.id, req.body, req.user._id.toString(), req.user.role);
   
   res
     .status(200)
@@ -60,7 +60,7 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response): Pr
     throw new ApiError(401, 'Auth required');
   }
 
-  await CourseService.deleteCourse(req.params.id, req.user._id.toString());
+  await CourseService.deleteCourse(req.params.id, req.user._id.toString(), req.user.role);
   
   res
     .status(200)
@@ -77,7 +77,7 @@ export const changeCourseStatus = asyncHandler(async (req: Request, res: Respons
     throw new ApiError(400, 'Invalid status update');
   }
 
-  const course = await CourseService.changeStatus(req.params.id, status, req.user._id.toString());
+  const course = await CourseService.changeStatus(req.params.id, status, req.user._id.toString(), req.user.role);
 
   res
     .status(200)

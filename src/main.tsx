@@ -221,15 +221,21 @@ const App = () => {
   );
 };
 
+import { HelmetProvider } from 'react-helmet-async';
+import { CloudflareAnalytics } from './components/analytics/CloudflareAnalytics';
+
 // Mount App
 ReactDOM.createRoot(document.getElementById('app')!).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <PlayHTMLProvider>
-          <App />
-        </PlayHTMLProvider>
-      </AuthProvider>
-    </BrowserRouter>
+    <HelmetProvider>
+      <CloudflareAnalytics />
+      <BrowserRouter>
+        <AuthProvider>
+          <PlayHTMLProvider>
+            <App />
+          </PlayHTMLProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>
 );

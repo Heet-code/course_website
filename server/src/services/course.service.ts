@@ -83,7 +83,8 @@ export class CourseService {
   static async updateCourse(
     courseId: string,
     courseData: Partial<ICourse>,
-    instructorId: string
+    instructorId: string,
+    role: string = 'instructor'
   ): Promise<ICourse> {
     const course = await Course.findById(courseId);
     if (!course) {
@@ -91,7 +92,7 @@ export class CourseService {
     }
 
     // Check ownership
-    if (course.instructorId.toString() !== instructorId) {
+    if (role !== 'admin' && course.instructorId.toString() !== instructorId) {
       throw new ApiError(403, 'You do not have permission to modify this course');
     }
 
@@ -105,26 +106,26 @@ export class CourseService {
     return course;
   }
 
-  static async deleteCourse(courseId: string, instructorId: string): Promise<void> {
+  static async deleteCourse(courseId: string, instructorId: string, role: string = 'instructor'): Promise<void> {
     const course = await Course.findById(courseId);
     if (!course) {
       throw new ApiError(404, 'Course not found');
     }
 
-    if (course.instructorId.toString() !== instructorId) {
+    if (role !== 'admin' && course.instructorId.toString() !== instructorId) {
       throw new ApiError(403, 'You do not have permission to delete this course');
     }
 
     await Course.deleteOne({ _id: courseId });
   }
 
-  static async changeStatus(courseId: string, status: 'published' | 'draft', instructorId: string): Promise<ICourse> {
+  static async changeStatus(courseId: string, status: 'published' | 'draft', instructorId: string, role: string = 'instructor'): Promise<ICourse> {
     const course = await Course.findById(courseId);
     if (!course) {
       throw new ApiError(404, 'Course not found');
     }
 
-    if (course.instructorId.toString() !== instructorId) {
+    if (role !== 'admin' && course.instructorId.toString() !== instructorId) {
       throw new ApiError(403, 'You do not have permission to update this course status');
     }
 

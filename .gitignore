@@ -31,3 +31,6 @@ server/node_modules
 *.sw?
 
 .vercel
+playwright-report
+test-results
+coverage

@@ -136,5 +136,37 @@ export const mockAuth = {
     }, async () => {
       return mockGetCurrentUser();
     }).catch(() => null);
+  },
+
+  // Forgot password
+  async forgotPassword(email: string): Promise<{ success: boolean; error?: string; message?: string }> {
+    try {
+      const response = await safeRequest<any>('/auth/forgot-password', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+      }, async () => {
+        await delay(500);
+        return { message: 'If an account with that email exists, a reset link has been sent.' };
+      });
+      return { success: true, message: response.message || 'If an account with that email exists, a reset link has been sent.' };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Failed to request password reset' };
+    }
+  },
+
+  // Reset password
+  async resetPassword(token: string, password: string): Promise<{ success: boolean; error?: string; message?: string }> {
+    try {
+      const response = await safeRequest<any>(`/auth/reset-password/${token}`, {
+        method: 'POST',
+        body: JSON.stringify({ password }),
+      }, async () => {
+        await delay(500);
+        return { message: 'Password has been reset successfully. You can now log in.' };
+      });
+      return { success: true, message: response.message || 'Password has been reset successfully. You can now log in.' };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Failed to reset password. The token may be expired.' };
+    }
   }
 };

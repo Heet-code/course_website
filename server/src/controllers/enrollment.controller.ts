@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { EnrollmentService } from '../services/enrollment.service';
+import { Course } from '../models/Course.model';
+import { emailService } from '../services/email.service';
 import { ApiResponse } from '../utils/ApiResponse';
 import { ApiError } from '../utils/ApiError';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -10,6 +12,12 @@ export const enrollInCourse = asyncHandler(async (req: Request, res: Response): 
   }
 
   const enrollment = await EnrollmentService.enroll(req.user._id.toString(), req.params.courseId);
+
+  // Send enrollment confirmation email
+  const course = await Course.findById(req.params.courseId).select('title');
+  if (course) {
+    emailService.sendEnrollmentEmail(req.user.email, req.user.name, course.title);
+  }
 
   res
     .status(201)

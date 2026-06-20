@@ -3,6 +3,7 @@ import { Course } from '../models/Course.model';
 import { User } from '../models/User.model';
 import { Enrollment } from '../models/Enrollment.model';
 import { Certificate } from '../models/Certificate.model';
+import { AnalyticsEvent } from '../models/AnalyticsEvent.model';
 import { ApiResponse } from '../utils/ApiResponse';
 import { ApiError } from '../utils/ApiError';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -84,6 +85,44 @@ export const getAdminDashboard = asyncHandler(async (req: Request, res: Response
         courseCompletionRate,
       },
       'Admin dashboard stats loaded'
+    )
+  );
+});
+
+export const getAnalyticsSummary = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  // Aggregate data securely without exposing IP or PII
+  const totalEvents = await AnalyticsEvent.countDocuments();
+  const enrollClicks = await AnalyticsEvent.countDocuments({ eventName: 'enroll_click' });
+  const courseCardClicks = await AnalyticsEvent.countDocuments({ eventName: 'course_card_click' });
+  const contactSubmissions = await AnalyticsEvent.countDocuments({ eventName: 'contact_submit_success' });
+  const signupClicks = await AnalyticsEvent.countDocuments({ eventName: 'signup_click' });
+
+  // Top courses
+  const topCourses = await AnalyticsEvent.aggregate([
+    { $match: { eventName: 'course_card_click', courseSlug: { $exists: true, $ne: null } } },
+    { $group: { _id: '$courseSlug', clicks: { $sum: 1 } } },
+    { $sort: { clicks: -1 } },
+    { $limit: 5 }
+  ]);
+
+  const recentEvents = await AnalyticsEvent.find({}, { ipHash: 0, anonymousId: 0, userId: 0 })
+    .sort({ createdAt: -1 })
+    .limit(20)
+    .lean();
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        totalEvents,
+        enrollClicks,
+        courseCardClicks,
+        contactSubmissions,
+        signupClicks,
+        topCourses: topCourses.map(tc => ({ slug: tc._id, clicks: tc.clicks })),
+        recentEvents
+      },
+      'Analytics summary loaded'
     )
   );
 });

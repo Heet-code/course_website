@@ -434,5 +434,17 @@ export const mockApi = {
         setUsers(users);
       }
     });
+  },
+
+  // --- CONTACT ---
+  async submitContact(data: { name: string; email: string; subject: string; message: string; turnstileToken?: string }): Promise<any> {
+    return safeRequest<any>('/contact', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }, async () => {
+      // Mock fallback
+      await delay(500);
+      return { success: true, message: 'Message sent successfully (mock)' };
+    });
   }
 };

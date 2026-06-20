@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /student/
+Disallow: /instructor/
+Disallow: /api/
+
+Sitemap: https://course-website-pages.kalthiyaheet.workers.dev/sitemap.xml

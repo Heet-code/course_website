@@ -12,6 +12,7 @@ import { getNotifications, setNotifications } from '../../lib/storage';
 import { BrandMark } from './BrandMark';
 export { BrandMark } from './BrandMark';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+import { SEO } from '../seo/SEO';
 
 // Animation Stack Imports
 import { PageTransition } from '../animations/PageTransition';
@@ -519,7 +520,9 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-bg flex">
+    <>
+      <SEO title="Dashboard — The Learning Collective" noIndex />
+      <div className="min-h-screen bg-bg flex">
       {/* Sidebar navigation */}
       <DashboardSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       
@@ -531,6 +534,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
         </main>
       </div>
     </div>
+    </>
   );
 };
 

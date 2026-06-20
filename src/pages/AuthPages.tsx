@@ -1,11 +1,30 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { useAuth } from '../hooks/useAuth';
 import { Input, Button, Badge } from '../components/ui';
 import { AuthLayout } from '../components/layout';
 import { BookOpen, UserCheck, ShieldCheck, Sparkles } from 'lucide-react';
+import { SEO } from '../components/seo/SEO';
+import { trackLoginSuccess, trackRoleSelected, trackSignupClick } from '../lib/analytics';
 import type { UserRole } from '../types';
+
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY || '1x00000000000000000000AA';
+
+const useTurnstileBypass = () => {
+  const [turnstileSupported, setTurnstileSupported] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!(window as any).turnstile) {
+        setTurnstileSupported(false);
+      }
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return turnstileSupported;
+};
 
 // ==========================================
 // ROLE CREDENTIAL MAP
@@ -50,8 +69,11 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const [turnstileKey, setTurnstileKey] = useState<number>(0);
+  const turnstileSupported = useTurnstileBypass();
 
   const selectRole = useCallback((role: UserRole) => {
+    trackRoleSelected(role);
     setSelectedRole(role);
     setError(null);
   }, []);
@@ -80,6 +102,7 @@ export const LoginPage: React.FC = () => {
     setLoading(false);
 
     if (res.success && res.user) {
+      trackLoginSuccess(res.user.role);
       const redirect = searchParams.get('redirect');
       if (redirect) {
         navigate(decodeURIComponent(redirect));
@@ -91,11 +114,15 @@ export const LoginPage: React.FC = () => {
       else navigate('/student/dashboard');
     } else {
       setError(res.error || 'Authentication credentials invalid.');
+      setTurnstileKey(prev => prev + 1);
+      setTurnstileToken('');
     }
   };
 
   return (
-    <AuthLayout subtitle="Sign in to The Learning Collective">
+    <>
+      <SEO title="Login — The Learning Collective" noIndex />
+      <AuthLayout subtitle="Sign in to The Learning Collective">
       <form onSubmit={handleSubmit} className="space-y-5">
         {error && (
           <div className="p-3 bg-danger/10 text-text-main border border-danger/30 rounded-ctrl text-xs font-semibold text-left">
@@ -205,14 +232,15 @@ export const LoginPage: React.FC = () => {
 
         <div className="flex justify-center py-2">
           <Turnstile
-            siteKey="0x4AAAAAAADkAyIjkToDthEhS"
+            key={turnstileKey}
+            siteKey={TURNSTILE_SITE_KEY}
             onSuccess={(token) => setTurnstileToken(token)}
             onError={() => setTurnstileToken('')}
             onExpire={() => setTurnstileToken('')}
           />
         </div>
 
-        <Button type="submit" className="w-full" loading={loading} disabled={!turnstileToken}>
+        <Button type="submit" className="w-full" loading={loading} disabled={!turnstileToken && turnstileSupported}>
           Sign In as {ROLE_CREDENTIALS[selectedRole].label}
         </Button>
 
@@ -274,6 +302,7 @@ export const LoginPage: React.FC = () => {
         </div>
       </form>
     </AuthLayout>
+    </>
   );
 };
 
@@ -292,6 +321,8 @@ export const SignupPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const [turnstileKey, setTurnstileKey] = useState<number>(0);
+  const turnstileSupported = useTurnstileBypass();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -311,6 +342,7 @@ export const SignupPage: React.FC = () => {
     setLoading(false);
 
     if (res.success) {
+      trackSignupClick(role);
       if (role === 'instructor') {
         navigate('/instructor/dashboard');
       } else {
@@ -318,11 +350,15 @@ export const SignupPage: React.FC = () => {
       }
     } else {
       setError(res.error || 'Registration failed.');
+      setTurnstileKey(prev => prev + 1);
+      setTurnstileToken('');
     }
   };
 
   return (
-    <AuthLayout subtitle="Join The Learning Collective">
+    <>
+      <SEO title="Sign Up — The Learning Collective" noIndex />
+      <AuthLayout subtitle="Join The Learning Collective">
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
           <div className="p-3 bg-danger/10 text-text-main border border-danger/30 rounded-ctrl text-xs font-semibold text-left">
@@ -364,7 +400,7 @@ export const SignupPage: React.FC = () => {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={() => setRole('student')}
+              onClick={() => { trackRoleSelected('student'); setRole('student'); }}
               className={`py-2 text-xs font-bold border rounded-ctrl transition-all ${
                 role === 'student'
                   ? 'bg-secondary border-secondary text-[#111827] font-black'
@@ -375,7 +411,7 @@ export const SignupPage: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={() => setRole('instructor')}
+              onClick={() => { trackRoleSelected('instructor'); setRole('instructor'); }}
               className={`py-2 text-xs font-bold border rounded-ctrl transition-all ${
                 role === 'instructor'
                   ? 'bg-secondary border-secondary text-[#111827] font-black'
@@ -389,14 +425,15 @@ export const SignupPage: React.FC = () => {
 
         <div className="flex justify-center py-2">
           <Turnstile
-            siteKey="0x4AAAAAAADkAyIjkToDthEhS"
+            key={turnstileKey}
+            siteKey={TURNSTILE_SITE_KEY}
             onSuccess={(token) => setTurnstileToken(token)}
             onError={() => setTurnstileToken('')}
             onExpire={() => setTurnstileToken('')}
           />
         </div>
 
-        <Button type="submit" className="w-full" loading={loading} disabled={!turnstileToken}>
+        <Button type="submit" className="w-full" loading={loading} disabled={!turnstileToken && turnstileSupported}>
           Create Account
         </Button>
 
@@ -412,6 +449,7 @@ export const SignupPage: React.FC = () => {
         </div>
       </form>
     </AuthLayout>
+    </>
   );
 };
 
@@ -419,33 +457,51 @@ export const SignupPage: React.FC = () => {
 // 3. FORGOT PASSWORD PAGE
 // ==========================================
 export const ForgotPasswordPage: React.FC = () => {
-  const navigate = useNavigate();
+  const { forgotPassword } = useAuth();
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
-    setSent(true);
-    setTimeout(() => {
-      navigate('/otp-verify');
-    }, 1200);
+    
+    setLoading(true);
+    setError(null);
+    
+    const res = await forgotPassword(email);
+    setLoading(false);
+    
+    if (res.success) {
+      setSent(true);
+    } else {
+      setError(res.error || 'Failed to send reset email.');
+    }
   };
 
   return (
-    <AuthLayout subtitle="Reset password | The Learning Collective">
+    <>
+      <SEO title="Forgot Password — The Learning Collective" noIndex />
+      <AuthLayout subtitle="Reset password | The Learning Collective">
       {sent ? (
         <div className="py-6 text-center space-y-3">
-          <Badge variant="primary">Code Sent</Badge>
+          <Badge variant="primary">Link Sent</Badge>
           <h3 className="text-sm font-bold text-text-main">Check Your Email</h3>
-          <p className="text-xs text-text-muted leading-relaxed">We have sent a 6-digit OTP verification code to your email.</p>
+          <p className="text-xs text-text-muted leading-relaxed">If an account with that email exists, we have sent a password reset link.</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <p className="text-xs text-text-muted text-left leading-relaxed">
-            Enter your account email below. We will send a security code to authenticate password modifications.
+            Enter your account email below. We will send a secure link to reset your password.
           </p>
           
+          {error && (
+            <div className="p-3 bg-danger/10 text-text-main border border-danger/30 rounded-ctrl text-xs font-semibold text-left">
+              {error}
+            </div>
+          )}
+
           <Input
             label="Email address"
             type="email"
@@ -453,24 +509,25 @@ export const ForgotPasswordPage: React.FC = () => {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
+            disabled={loading}
           />
 
-          <Button type="submit" className="w-full">
-            Send Reset OTP
+          <Button type="submit" className="w-full" disabled={loading}>
+            {loading ? 'Sending...' : 'Send Reset Link'}
           </Button>
 
           <div className="text-center">
-            <button
-              type="button"
-              onClick={() => navigate('/login')}
+            <Link
+              to="/login"
               className="text-xs font-bold text-secondary hover:underline focus:outline-none"
             >
               Return to login
-            </button>
+            </Link>
           </div>
         </form>
       )}
     </AuthLayout>
+    </>
   );
 };
 
@@ -478,13 +535,28 @@ export const ForgotPasswordPage: React.FC = () => {
 // 4. RESET PASSWORD PAGE
 // ==========================================
 export const ResetPasswordPage: React.FC = () => {
+  const { resetPassword } = useAuth();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  
+  const token = searchParams.get('token');
+  
   const [pass, setPass] = useState('');
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (!token) {
+      setError('Invalid or missing reset token.');
+    }
+  }, [token]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!token) return;
+    
     if (pass !== confirm) {
       setError('Passwords do not match.');
       return;
@@ -493,41 +565,65 @@ export const ResetPasswordPage: React.FC = () => {
       setError('Password must be at least 6 characters.');
       return;
     }
-    navigate('/login');
+    
+    setLoading(true);
+    setError(null);
+    
+    const res = await resetPassword(token, pass);
+    setLoading(false);
+    
+    if (res.success) {
+      setSuccess(true);
+      setTimeout(() => navigate('/login'), 3000);
+    } else {
+      setError(res.error || 'Failed to reset password.');
+    }
   };
 
   return (
-    <AuthLayout subtitle="Choose new password | The Learning Collective">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {error && (
-          <div className="p-3 bg-danger/10 text-text-main border border-danger/30 rounded-ctrl text-xs font-semibold text-left">
-            {error}
-          </div>
-        )}
+    <>
+      <SEO title="Reset Password — The Learning Collective" noIndex />
+      <AuthLayout subtitle="Choose new password | The Learning Collective">
+      {success ? (
+        <div className="py-6 text-center space-y-3">
+          <Badge variant="success">Password Reset!</Badge>
+          <p className="text-xs text-text-muted leading-relaxed">Your password has been successfully reset. Redirecting to login...</p>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {error && (
+            <div className="p-3 bg-danger/10 text-text-main border border-danger/30 rounded-ctrl text-xs font-semibold text-left">
+              {error}
+            </div>
+          )}
 
-        <Input
-          label="New Password"
-          type="password"
-          placeholder="Min. 6 characters"
-          value={pass}
-          onChange={e => setPass(e.target.value)}
-          required
-        />
+          <Input
+            label="New Password"
+            type="password"
+            placeholder="Min. 6 characters"
+            value={pass}
+            onChange={e => setPass(e.target.value)}
+            required
+            disabled={loading || !token}
+          />
 
-        <Input
-          label="Confirm Password"
-          type="password"
-          placeholder="Confirm new password"
-          value={confirm}
-          onChange={e => setConfirm(e.target.value)}
-          required
-        />
+          <Input
+            label="Confirm Password"
+            type="password"
+            placeholder="Confirm new password"
+            value={confirm}
+            onChange={e => setConfirm(e.target.value)}
+            required
+            disabled={loading || !token}
+          />
 
-        <Button type="submit" className="w-full">
-          Update Password
-        </Button>
-      </form>
+          <Button type="submit" className="w-full" disabled={loading || !token}>
+            {loading ? 'Updating...' : 'Update Password'}
+          </Button>
+        </form>
+      )}
     </AuthLayout>
+    </>
   );
 };
 

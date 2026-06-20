@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
 @theme {
@@ -24,39 +25,39 @@
   --color-warning: var(--color-warning);
   --color-danger: var(--color-danger);
 
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: 'Outfit', 'Plus Jakarta Sans', 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   
   --radius-ctrl: 6px;
-  --radius-card: 8px;
-  --radius-overlay: 12px;
+  --radius-card: 10px;
+  --radius-overlay: 14px;
 }
 
 @layer base {
   :root {
-    /* Light Theme Tokens */
-    --color-bg: #FFF5E6;
+    /* Light Watermelon Theme Tokens */
+    --color-bg: #FCF9F6;
     --color-bg-elevated: #FFFFFF;
     --color-surface: #FFFFFF;
-    --color-surface-muted: #F7EFE4;
-    --color-border: rgba(17, 24, 39, 0.12);
-    --color-border-strong: rgba(17, 24, 39, 0.20);
+    --color-surface-muted: #F3ECE6;
+    --color-border: rgba(17, 24, 39, 0.08);
+    --color-border-strong: rgba(17, 24, 39, 0.16);
     
-    --color-text-main: #111827;
-    --color-text-muted: #374151;
-    --color-text-subtle: #6B7280;
-    --color-text-disabled: #9CA3AF;
+    --color-text-main: #0C0F16;
+    --color-text-muted: #2A313C;
+    --color-text-subtle: #64748B;
+    --color-text-disabled: #94A3B8;
 
-    --color-primary: #FAD4C0;
-    --color-primary-hover: #F8C4AA;
-    --color-primary-text: #111827;
+    --color-primary: #FF2E93;
+    --color-primary-hover: #FF4EA5;
+    --color-primary-text: #FFFFFF;
     
-    --color-secondary: #80A1C1;
-    --color-secondary-hover: #6F93B6;
+    --color-secondary: #00FFA3;
+    --color-secondary-hover: #05F5A4;
     
-    --color-success: #16A34A;
-    --color-warning: #D97706;
-    --color-danger: #DC2626;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
 
     font-family: var(--font-sans);
     color: var(--color-text-main);
@@ -65,29 +66,29 @@
   }
 
   .dark {
-    /* Dark Theme Tokens */
-    --color-bg: #0F1115;
-    --color-bg-elevated: #14171D;
-    --color-surface: #181B22;
-    --color-surface-muted: #222631;
-    --color-border: rgba(255, 255, 255, 0.12);
-    --color-border-strong: rgba(255, 255, 255, 0.20);
+    /* Dark Watermelon UI Theme Tokens */
+    --color-bg: #07090E;
+    --color-bg-elevated: #0C0F17;
+    --color-surface: #121622;
+    --color-surface-muted: #1A2030;
+    --color-border: rgba(255, 255, 255, 0.08);
+    --color-border-strong: rgba(255, 255, 255, 0.16);
 
     --color-text-main: #F8FAFC;
-    --color-text-muted: #CBD5E1;
+    --color-text-muted: #E2E8F0;
     --color-text-subtle: #94A3B8;
-    --color-text-disabled: #64748B;
+    --color-text-disabled: #475569;
 
-    --color-primary: #FAD4C0;
-    --color-primary-hover: #F8C4AA;
-    --color-primary-text: #111827;
+    --color-primary: #FF2E93;
+    --color-primary-hover: #FF4EA5;
+    --color-primary-text: #FFFFFF;
 
-    --color-secondary: #80A1C1;
-    --color-secondary-hover: #6F93B6;
+    --color-secondary: #00FFA3;
+    --color-secondary-hover: #05F5A4;
 
-    --color-success: #16A34A;
-    --color-warning: #D97706;
-    --color-danger: #DC2626;
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-danger: #EF4444;
   }
 
   body {
@@ -98,7 +99,7 @@
 
   /* Accessibility rules: WCAG 2.2 AA visible focus rings */
   *:focus-visible {
-    outline: 2px solid var(--color-secondary);
+    outline: 2px solid var(--color-primary);
     outline-offset: 2px;
   }
   
@@ -129,17 +130,48 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
   padding: 24px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
 }
 
 .bento-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
   border-color: var(--color-secondary);
 }
 
-.dark .bento-card:hover {
-  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.3);
+/* Watermelon Glow and Border Effects */
+.watermelon-card-glow-pink {
+  box-shadow: 0 0 20px -6px rgba(255, 46, 147, 0.12), 0 0 15px -8px rgba(255, 46, 147, 0.15);
 }
+.watermelon-card-glow-green {
+  box-shadow: 0 0 20px -6px rgba(0, 255, 163, 0.12), 0 0 15px -8px rgba(0, 255, 163, 0.15);
+}
+.watermelon-card-glow-pink:hover {
+  box-shadow: 0 0 30px -4px rgba(255, 46, 147, 0.22), 0 0 20px -5px rgba(255, 46, 147, 0.25);
+  border-color: var(--color-primary);
+}
+.watermelon-card-glow-green:hover {
+  box-shadow: 0 0 30px -4px rgba(0, 255, 163, 0.22), 0 0 20px -5px rgba(0, 255, 163, 0.25);
+  border-color: var(--color-secondary);
+}
+
+.watermelon-border-gradient {
+  position: relative;
+}
+.watermelon-border-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  z-index: 0;
+  margin: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  pointer-events: none;
+  opacity: 0.25;
+  transition: opacity 0.3s ease;
+}
+.watermelon-border-gradient:hover::before {
+  opacity: 0.85;
+}
+

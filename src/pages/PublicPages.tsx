@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link, useParams } from 'react-router-dom';
+import { Turnstile } from '@marsidev/react-turnstile';
 import { 
   BookOpen, Star, Clock, User, ArrowRight, Code, 
   Database, Palette, Smartphone, TrendingUp, ShieldCheck, Zap, 
@@ -18,6 +19,14 @@ import { useCourses, useCourseDetails } from '../hooks/useCourses';
 import { useAuth } from '../hooks/useAuth';
 import { useProgress } from '../hooks/useProgress';
 import { mockCategories, mockTestimonials } from '../data/mockData';
+import { 
+  trackCourseClick, 
+  trackCourseDetailView, 
+  trackEnrollClick, 
+  trackPricingCtaClick, 
+  trackContactSuccess,
+  trackEvent 
+} from '../lib/analytics';
 
 // Animation Stack Imports
 import { AnimatedBackground } from '../components/animations/AnimatedBackground';
@@ -28,6 +37,13 @@ import { ModelEmbed } from '../components/media/ModelEmbed';
 import { PageTransition } from '../components/animations/PageTransition';
 import { PageEnter } from '../components/animations/PageEnter';
 import { gsap } from '../animations/gsapSetup';
+
+// Haikei, Motion Primitives, and Anime.js Imports
+import { HaikeiGridPattern, HaikeiWaves, HaikeiBlobGrid } from '../components/ui/HaikeiBackgrounds';
+import { TextEffect, InfiniteSlider, OrbitingCircles } from '../components/animations/MotionPrimitives';
+import { AnimeBlobMorph, AnimeStaggerGrid } from '../components/animations/AnimeComponents';
+import { SEO } from '../components/seo/SEO';
+
 // ==========================================
 // 1. LANDING PAGE
 // ==========================================
@@ -36,6 +52,23 @@ export const LandingPage: React.FC = () => {
   const { courses, loading } = useCourses();
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
+
+  const landingStructuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "The Learning Collective",
+        "url": "https://course-website-pages.kalthiyaheet.workers.dev",
+        "logo": "https://course-website-pages.kalthiyaheet.workers.dev/og-image.png"
+      },
+      {
+        "@type": "WebSite",
+        "name": "The Learning Collective",
+        "url": "https://course-website-pages.kalthiyaheet.workers.dev"
+      }
+    ]
+  };
 
   useEffect(() => {
     // If user prefers reduced motion, do not run GSAP animations
@@ -158,29 +191,33 @@ export const LandingPage: React.FC = () => {
 
   return (
     <PageTransition>
+      <SEO structuredData={landingStructuredData} />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
+        {/* Haikei SVG Overlays */}
+        <HaikeiGridPattern />
+        <HaikeiBlobGrid />
+        
         <AnimatedBackground />
         <PublicNavbar />
         
         {/* 1. HERO SECTION */}
         <section className="relative px-6 py-16 sm:py-24 max-w-7xl mx-auto text-left w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Glow watermarks */}
-          <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-primary/10 blur-3xl pointer-events-none -z-10" />
-
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-6 z-10">
             <PageEnter.Item delay={0.15}>
-              <Badge variant="primary">Next Generation Learning</Badge>
+              <Badge variant="primary" className="border-primary/30">Next Generation Learning</Badge>
             </PageEnter.Item>
             
             <div className="space-y-2">
               <PageEnter.Item delay={0.25} y={15}>
                 <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-text-main tracking-tight leading-[1.05]">
-                  Master new skills with
+                  <TextEffect variant="blur-in" per="word" delay={0.1}>Master new skills with</TextEffect>
                 </span>
               </PageEnter.Item>
               <PageEnter.Item delay={0.35} y={15}>
                 <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-text-main tracking-tight leading-[1.05]">
-                  <span className="text-secondary underline decoration-primary decoration-4">Bento Grid Layouts</span>
+                  <span className="text-secondary underline decoration-primary decoration-4">
+                    <TextEffect variant="scale-up" per="char" delay={0.55}>Bento Grid Layouts</TextEffect>
+                  </span>
                 </span>
               </PageEnter.Item>
             </div>
@@ -194,12 +231,12 @@ export const LandingPage: React.FC = () => {
             <PageEnter.Item delay={0.55} scale={0.97}>
               <div className="flex flex-wrap gap-4 pt-2">
                 <MagneticButton>
-                  <Button size="lg" onClick={() => navigate(getStartedPath)}>
+                  <Button size="lg" onClick={() => { trackSignupClick(); navigate(getStartedPath); }} className="watermelon-card-glow-pink">
                     Get Started Free
                   </Button>
                 </MagneticButton>
                 <MagneticButton>
-                  <Button size="lg" variant="outline" onClick={() => navigate('/courses')}>
+                  <Button size="lg" variant="outline" onClick={() => { trackEvent('page_view_manual', { metadata: { clicked: 'browse_courses' } }); navigate('/courses'); }} className="border-border hover:border-secondary transition-colors">
                     Browse Courses
                   </Button>
                 </MagneticButton>
@@ -219,294 +256,361 @@ export const LandingPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Live Learners Count & Dashboard Preview mockup */}
-          <div className="lg:col-span-5 w-full flex flex-col gap-6">
-            <PageEnter.Item delay={0.7} scale={0.95} duration={0.85}>
+          {/* Live Learners Count & Dashboard Preview mockup with Orbiting Skills background */}
+          <div className="lg:col-span-5 w-full flex flex-col gap-6 relative items-center justify-center min-h-[380px] sm:min-h-[440px]">
+            {/* Motion Primitives: Orbiting Circles backdrop */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-30 dark:opacity-50 pointer-events-none scale-90 sm:scale-100">
+              <OrbitingCircles speedMultiplier={0.75} innerRadius={90} outerRadius={150}>
+                {/* Inner track items */}
+                <div className="p-2 bg-surface border border-primary/20 text-primary rounded-full shadow-sm"><Code className="h-4.5 w-4.5" /></div>
+                <div className="p-2 bg-surface border border-secondary/20 text-secondary rounded-full shadow-sm"><Database className="h-4.5 w-4.5" /></div>
+                <div className="p-2 bg-surface border border-primary/20 text-primary rounded-full shadow-sm"><Palette className="h-4.5 w-4.5" /></div>
+                <div className="p-2 bg-surface border border-secondary/20 text-secondary rounded-full shadow-sm"><Smartphone className="h-4.5 w-4.5" /></div>
+                
+                {/* Outer track items */}
+                <div className="p-2 bg-surface border border-secondary/20 text-secondary rounded-full shadow-sm"><Zap className="h-4.5 w-4.5" /></div>
+                <div className="p-2 bg-surface border border-primary/20 text-primary rounded-full shadow-sm"><BookOpen className="h-4.5 w-4.5" /></div>
+                <div className="p-2 bg-surface border border-secondary/20 text-secondary rounded-full shadow-sm"><ShieldCheck className="h-4.5 w-4.5" /></div>
+                <div className="p-2 bg-surface border border-primary/20 text-primary rounded-full shadow-sm"><Award className="h-4.5 w-4.5" /></div>
+              </OrbitingCircles>
+            </div>
+            
+            <PageEnter.Item delay={0.7} scale={0.95} duration={0.85} className="w-full z-10">
               <AnimatedBentoPreview />
             </PageEnter.Item>
-            <PageEnter.Item delay={1.1} y={15} duration={0.85}>
+            <PageEnter.Item delay={1.1} y={15} duration={0.85} className="w-full z-10">
               <LiveLearnersCard />
             </PageEnter.Item>
           </div>
         </section>
 
-      {/* 2. SEARCH & CATS SECTION */}
-      <section className="bg-bg-elevated border-y border-border py-12 px-6 w-full">
-        <div className="max-w-7xl mx-auto space-y-8">
-          <ScrollReveal direction="up">
-            <div className="max-w-xl mx-auto text-center space-y-4">
-              <h2 className="text-2xl font-black text-text-main">What do you want to learn today?</h2>
-              <form onSubmit={handleSearchSubmit} className="flex gap-2">
-                <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search Python, React, UI/UX..." />
-                <Button type="submit">Search</Button>
-              </form>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal direction="up" delay={0.2}>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {mockCategories.map((cat) => {
-                const iconKey = cat.icon as keyof typeof categoryIcons;
-                return (
-                  <Card 
-                    key={cat.id} 
-                    hoverable 
-                    onClick={() => navigate(`/courses?category=${encodeURIComponent(cat.name)}`)}
-                    className="flex items-center gap-3.5 p-4 bg-surface border border-border text-left cursor-pointer"
-                  >
-                    <div className="p-2.5 bg-secondary/10 text-secondary rounded-ctrl">
-                      {categoryIcons[iconKey] || <BookOpen className="h-5 w-5" />}
-                    </div>
-                    <div>
-                      <h4 className="text-xs font-bold text-text-main leading-none mb-1.5">{cat.name}</h4>
-                      <span className="text-[10px] text-text-subtle font-semibold">{cat.count} Courses</span>
-                    </div>
-                  </Card>
-                );
-              })}
-            </div>
-          </ScrollReveal>
+        {/* Motion Primitives: Infinite Slider logo/feature marquee */}
+        <div className="py-6 bg-surface-muted/20 border-y border-border overflow-hidden w-full backdrop-blur-[2px]">
+          <InfiniteSlider speed={35} gap={56}>
+            <span className="text-xs font-black uppercase tracking-widest text-text-subtle/50 flex items-center gap-2">
+              <Code className="h-4 w-4 text-primary" /> React & Vite
+            </span>
+            <span className="text-xs font-black uppercase tracking-widest text-text-subtle/50 flex items-center gap-2">
+              <Database className="h-4 w-4 text-secondary" /> MongoDB Schema
+            </span>
+            <span className="text-xs font-black uppercase tracking-widest text-text-subtle/50 flex items-center gap-2">
+              <Palette className="h-4 w-4 text-primary" /> Figma Components
+            </span>
+            <span className="text-xs font-black uppercase tracking-widest text-text-subtle/50 flex items-center gap-2">
+              <Smartphone className="h-4 w-4 text-secondary" /> Mobile Native
+            </span>
+            <span className="text-xs font-black uppercase tracking-widest text-text-subtle/50 flex items-center gap-2">
+              <Zap className="h-4 w-4 text-primary" /> Node APIs
+            </span>
+            <span className="text-xs font-black uppercase tracking-widest text-text-subtle/50 flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-secondary" /> Authentication
+            </span>
+            <span className="text-xs font-black uppercase tracking-widest text-text-subtle/50 flex items-center gap-2">
+              <Award className="h-4 w-4 text-primary" /> Validated Portals
+            </span>
+          </InfiniteSlider>
         </div>
-      </section>
 
-      {/* 3. BENTO FEATURE GRID */}
-      <section className="bento-feature-grid-sec px-6 py-16 sm:py-24 max-w-7xl mx-auto w-full text-left space-y-10">
-        <ScrollReveal direction="up">
-          <div className="max-w-xl text-left space-y-2">
-            <Badge variant="secondary">Platform Features</Badge>
-            <h2 className="text-3xl font-black tracking-tight text-text-main">Structured Bento Modules</h2>
-          </div>
-        </ScrollReveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="md:col-span-2 bento-feature-card-gsap">
-            <BentoFeatureCard
-              title="Interactive Syllabus Player"
-              description="Collapsible split-screen course player loaded with resource attachments, code cheat sheets, and notebook sync tools."
-              icon={<BookOpen className="h-6 w-6" />}
-              badge="Premium"
-              className="h-full"
-            />
-          </div>
-          <div className="bento-feature-card-gsap">
-            <BentoFeatureCard
-              title="WCAG 2.2 Standard"
-              description="Full keyboard focus states, high contrast text variables, and accessible labels built from day one."
-              icon={<ShieldCheck className="h-6 w-6" />}
-              className="h-full"
-            />
-          </div>
-          <div className="bento-feature-card-gsap">
-            <BentoFeatureCard
-              title="Instant Certificate Generation"
-              description="Achieve 100% curriculum completion and pass final quizzes to unlock public credential validation codes."
-              icon={<Award className="h-6 w-6" />}
-              className="h-full"
-            />
-          </div>
-          <div className="md:col-span-2 bento-feature-card-gsap">
-            <BentoFeatureCard
-              title="Local Simulation Mode"
-              description="State structures persisted entirely in LocalStorage for lightning fast offline validation before cloud deployment."
-              icon={<Zap className="h-6 w-6" />}
-              badge="Offline"
-              className="h-full"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* 4. POPULAR COURSES PREVIEW */}
-      <section className="popular-courses-sec bg-bg-elevated border-t border-border py-16 sm:py-24 px-6 w-full text-left">
-        <div className="max-w-7xl mx-auto space-y-10">
-          <ScrollReveal direction="up">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <div className="space-y-2">
-                <Badge variant="success">Active Catalog</Badge>
-                <h2 className="text-3xl font-black tracking-tight text-text-main">Popular Courses</h2>
+        {/* 2. SEARCH & CATS SECTION */}
+        <section className="bg-bg-elevated/40 border-b border-border/80 py-12 px-6 w-full">
+          <div className="max-w-7xl mx-auto space-y-8">
+            <ScrollReveal direction="up">
+              <div className="max-w-xl mx-auto text-center space-y-4">
+                <h2 className="text-2xl font-black text-text-main">
+                  <TextEffect variant="blur-in" per="word">What do you want to learn today?</TextEffect>
+                </h2>
+                <form onSubmit={handleSearchSubmit} className="flex gap-2">
+                  <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search Python, React, UI/UX..." />
+                  <Button type="submit" className="watermelon-card-glow-pink">Search</Button>
+                </form>
               </div>
-              <Button variant="outline" onClick={() => navigate('/courses')}>
-                View Full Catalog <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
-            </div>
-          </ScrollReveal>
+            </ScrollReveal>
 
-          <div className="w-full">
-            {loading ? (
-              <LoadingSkeleton variant="card" count={3} />
-            ) : (
-              <CourseGrid courses={popularCourses} disableReveal={true} />
-            )}
+            <ScrollReveal direction="up" delay={0.2}>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                {mockCategories.map((cat) => {
+                  const iconKey = cat.icon as keyof typeof categoryIcons;
+                  return (
+                    <Card 
+                      key={cat.id} 
+                      hoverable 
+                      onClick={() => navigate(`/courses?category=${encodeURIComponent(cat.name)}`)}
+                      className="flex items-center gap-3.5 p-4 bg-surface border border-border text-left cursor-pointer hover:border-secondary watermelon-card-glow-green"
+                    >
+                      <div className="p-2.5 bg-secondary/10 text-secondary rounded-ctrl">
+                        {categoryIcons[iconKey] || <BookOpen className="h-5 w-5" />}
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-text-main leading-none mb-1.5">{cat.name}</h4>
+                        <span className="text-[10px] text-text-subtle font-semibold">{cat.count} Courses</span>
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </ScrollReveal>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 5. TESTIMONIALS */}
-      <section className="testimonials-sec px-6 py-16 max-w-7xl mx-auto w-full text-left space-y-8">
-        <ScrollReveal direction="up">
-          <div className="max-w-xl space-y-2">
-            <Badge variant="primary">Reviews</Badge>
-            <h2 className="text-3xl font-black text-text-main tracking-tight">Loved by Learners</h2>
-          </div>
-        </ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {mockTestimonials.map((test, idx) => (
-            <div key={idx} className="testimonial-card-gsap">
-              <Card className="bg-surface border border-border p-6 flex flex-col justify-between h-full">
-                <p className="text-xs text-text-muted italic leading-relaxed mb-6">"{test.content}"</p>
-                <div className="flex items-center gap-3">
-                  <img src={test.image} alt={test.name} className="h-10 w-10 rounded-full object-cover border border-border/50" />
-                  <div className="text-left">
-                    <h4 className="text-xs font-bold text-text-main leading-none mb-1">{test.name}</h4>
-                    <span className="text-[10px] text-text-subtle font-semibold">{test.role}</span>
-                  </div>
-                </div>
-              </Card>
-            </div>
-          ))}
-        </div>
-      </section>
+        {/* Haikei SVG Wave Transition */}
+        <HaikeiWaves variant="bottom" className="opacity-80" />
 
-      {/* 5.5 LEARNING WALL */}
-      <section className="px-6 py-16 max-w-7xl mx-auto w-full text-left border-t border-border">
-        <ScrollReveal direction="up">
-          <LearningWall />
-        </ScrollReveal>
-      </section>
- 
-      {/* 6. PRICING CARDS */}
-      <section className="pricing-cards-sec bg-bg-elevated border-t border-border py-16 px-6 w-full text-center">
-        <div className="max-w-7xl mx-auto space-y-10">
+        {/* 3. BENTO FEATURE GRID */}
+        <section className="bento-feature-grid-sec px-6 py-16 sm:py-24 max-w-7xl mx-auto w-full text-left space-y-10">
           <ScrollReveal direction="up">
-            <div className="max-w-xl mx-auto space-y-2">
-              <Badge variant="secondary">Simple Plans</Badge>
-              <h2 className="text-3xl font-black text-text-main tracking-tight">Flexible Pricing</h2>
-              <p className="text-xs text-text-subtle font-semibold">Start learning for free and upgrade as your developer career grows.</p>
+            <div className="max-w-xl text-left space-y-2">
+              <Badge variant="secondary" className="border-secondary/35">Platform Features</Badge>
+              <h2 className="text-3xl font-black tracking-tight text-text-main">
+                <TextEffect variant="blur-in" per="word">Structured Bento Modules</TextEffect>
+              </h2>
             </div>
           </ScrollReveal>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
-            {/* Free */}
-            <div className="h-full pricing-card-gsap">
-              <Card className="bg-surface border border-border p-6 flex flex-col justify-between h-full">
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <h3 className="text-sm font-extrabold uppercase text-text-main">Starter Free</h3>
-                    <span className="text-text-subtle text-xs font-semibold">Access to standard public catalog.</span>
-                  </div>
-                  <div className="text-3xl font-black text-text-main">$0 <span className="text-xs text-text-subtle font-bold uppercase">/ Free forever</span></div>
-                  <ul className="space-y-2.5 text-xs text-text-muted font-medium pt-2">
-                    <li>✓ Access to all free courses</li>
-                    <li>✓ Standard video player</li>
-                    <li>✓ Local course progress tracking</li>
-                  </ul>
-                </div>
-                <MagneticButton className="w-full mt-8">
-                  <Button variant="outline" className="w-full" onClick={() => navigate(getStartedPath)}>
-                    Join Platform
-                  </Button>
-                </MagneticButton>
-              </Card>
-            </div>
-            
-            {/* Pro */}
-            <div className="h-full pricing-card-gsap">
-              <Card className="bg-surface border-2 border-secondary p-6 flex flex-col justify-between h-full relative">
-                <Badge variant="secondary" className="absolute top-3 right-3">Popular</Badge>
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <h3 className="text-sm font-extrabold uppercase text-text-main">Pro Learner</h3>
-                    <span className="text-text-subtle text-xs font-semibold">Unlock premium advanced builder content.</span>
-                  </div>
-                  <div className="text-3xl font-black text-text-main">$29 <span className="text-xs text-text-subtle font-bold uppercase">/ monthly</span></div>
-                  <ul className="space-y-2.5 text-xs text-text-muted font-medium pt-2">
-                    <li>✓ Access to ALL courses (Free & Paid)</li>
-                    <li>✓ Interactive final quizzes</li>
-                    <li>✓ Printable completion certificates</li>
-                    <li>✓ Premium downloadable resources</li>
-                  </ul>
-                </div>
-                <MagneticButton className="w-full mt-8">
-                  <Button variant="primary" className="w-full" onClick={() => navigate('/pricing')}>
-                    Upgrade Pro
-                  </Button>
-                </MagneticButton>
-              </Card>
-            </div>
 
-            {/* Unlimited */}
-            <div className="h-full pricing-card-gsap">
-              <Card className="bg-surface border border-border p-6 flex flex-col justify-between h-full">
-                <div className="space-y-4">
-                  <div className="space-y-1">
-                    <h3 className="text-sm font-extrabold uppercase text-text-main">Enterprise Plan</h3>
-                    <span className="text-text-subtle text-xs font-semibold">For dev agencies & scaling SaaS teams.</span>
-                  </div>
-                  <div className="text-3xl font-black text-text-main">$199 <span className="text-xs text-text-subtle font-bold uppercase">/ annually</span></div>
-                  <ul className="space-y-2.5 text-xs text-text-muted font-medium pt-2">
-                    <li>✓ Dedicated team dashboards</li>
-                    <li>✓ Admin user management tables</li>
-                    <li>✓ Custom company certification logos</li>
-                    <li>✓ Priority SLA developer assistance</li>
-                  </ul>
+          {/* Anime.js: Center out staggered viewport reveal */}
+          <AnimeStaggerGrid columns={3} delay={150}>
+            <div className="md:col-span-2 h-full">
+              <BentoFeatureCard
+                title="Interactive Syllabus Player"
+                description="Collapsible split-screen course player loaded with resource attachments, code cheat sheets, and notebook sync tools."
+                icon={<BookOpen className="h-6 w-6" />}
+                badge="Premium"
+                className="h-full hover:border-primary watermelon-card-glow-pink"
+              />
+            </div>
+            <div className="h-full">
+              <BentoFeatureCard
+                title="WCAG 2.2 Standard"
+                description="Full keyboard focus states, high contrast text variables, and accessible labels built from day one."
+                icon={<ShieldCheck className="h-6 w-6" />}
+                className="h-full hover:border-secondary watermelon-card-glow-green"
+              />
+            </div>
+            <div className="h-full">
+              <BentoFeatureCard
+                title="Instant Certificate Generation"
+                description="Achieve 100% curriculum completion and pass final quizzes to unlock public credential validation codes."
+                icon={<Award className="h-6 w-6" />}
+                className="h-full hover:border-secondary watermelon-card-glow-green"
+              />
+            </div>
+            <div className="md:col-span-2 h-full">
+              <BentoFeatureCard
+                title="Local Simulation Mode"
+                description="State structures persisted entirely in LocalStorage for lightning fast offline validation before cloud deployment."
+                icon={<Zap className="h-6 w-6" />}
+                badge="Offline"
+                className="h-full hover:border-primary watermelon-card-glow-pink"
+              />
+            </div>
+          </AnimeStaggerGrid>
+        </section>
+
+        {/* Haikei SVG Wave Transition */}
+        <HaikeiWaves variant="top" className="opacity-80" />
+
+        {/* 4. POPULAR COURSES PREVIEW */}
+        <section className="popular-courses-sec bg-bg-elevated/40 border-y border-border py-16 sm:py-24 px-6 w-full text-left">
+          <div className="max-w-7xl mx-auto space-y-10">
+            <ScrollReveal direction="up">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+                <div className="space-y-2">
+                  <Badge variant="success" className="border-success/35">Active Catalog</Badge>
+                  <h2 className="text-3xl font-black tracking-tight text-text-main">Popular Courses</h2>
                 </div>
-                <MagneticButton className="w-full mt-8">
-                  <Button variant="outline" className="w-full" onClick={() => navigate('/contact')}>
-                    Contact Enterprise
-                  </Button>
-                </MagneticButton>
-              </Card>
+                <Button variant="outline" onClick={() => navigate('/courses')} className="hover:border-primary transition-colors">
+                  View Full Catalog <ArrowRight className="h-4 w-4 ml-1" />
+                </Button>
+              </div>
+            </ScrollReveal>
+
+            <div className="w-full">
+              {loading ? (
+                <LoadingSkeleton variant="card" count={3} />
+              ) : (
+                <CourseGrid courses={popularCourses} disableReveal={true} />
+              )}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 7. FAQ ACCORDION */}
-      <section className="faq-sec px-6 py-16 sm:py-24 max-w-3xl mx-auto w-full text-left space-y-8">
-        <ScrollReveal direction="up">
-          <h2 className="text-3xl font-black text-text-main text-center">Frequently Asked Questions</h2>
-        </ScrollReveal>
-        <div className="faq-gsap">
-          <Accordion
-            items={[
-              {
-                id: 'faq-1',
-                title: 'Is The Learning Collective completely frontend-only?',
-                content: 'Yes! The current system behaves as a full React + TypeScript SPA utilizing localStorage to record user logs, quiz scores, course syllabus builder updates, and role navigation. A cloud-ready API service structure makes backend integration simple later.'
-              },
-              {
-                id: 'faq-2',
-                title: 'How do I toggle user roles for student, instructor, and admin?',
-                content: 'Sign out and click Log In. You can use the pre-built credentials student@thelearningcollective.com (student), instructor@thelearningcollective.com (instructor), or admin@thelearningcollective.com (admin) with passwords (student123, instructor123, admin123) to jump directly into each dashboard.'
-              },
-              {
-                id: 'faq-3',
-                title: 'How do I download certificate PDFs?',
-                content: 'Once you progress through all lessons of a course and score >= passing grade on the final quiz, click Certificates in the student sidebar. Select the course certificate to view, and click "Print / Save PDF" to trigger the browser document dialog.'
-              }
-            ]}
-          />
-        </div>
-      </section>
-
-      {/* CTA sections */}
-      <section className="footer-promo-sec bg-primary/25 border-y border-border py-16 px-6 text-center w-full">
-        <div className="footer-promo-gsap max-w-xl mx-auto space-y-5">
-          <h2 className="text-2xl sm:text-3xl font-black text-text-main">Ready to share your expertise?</h2>
-          <p className="text-xs text-text-muted">Create instructor accounts, build courses using the syllabus visual outline tool, and track enrolled student progress.</p>
-          <div className="flex justify-center gap-3">
-            <MagneticButton>
-              <Button variant="secondary" onClick={() => navigate('/signup?role=instructor')}>Apply as Instructor</Button>
-            </MagneticButton>
-            <MagneticButton>
-              <Button variant="outline" onClick={() => navigate('/about')}>Learn More</Button>
-            </MagneticButton>
+        {/* 5. TESTIMONIALS */}
+        <section className="testimonials-sec px-6 py-16 max-w-7xl mx-auto w-full text-left space-y-8">
+          <ScrollReveal direction="up">
+            <div className="max-w-xl space-y-2">
+              <Badge variant="primary" className="border-primary/35">Reviews</Badge>
+              <h2 className="text-3xl font-black text-text-main tracking-tight">Loved by Learners</h2>
+            </div>
+          </ScrollReveal>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {mockTestimonials.map((test, idx) => (
+              <div key={idx} className="testimonial-card-gsap">
+                <Card className="bg-surface border border-border p-6 flex flex-col justify-between h-full hover:border-secondary watermelon-card-glow-green transition-all">
+                  <p className="text-xs text-text-muted italic leading-relaxed mb-6">"{test.content}"</p>
+                  <div className="flex items-center gap-3">
+                    <img src={test.image} alt={test.name} className="h-10 w-10 rounded-full object-cover border border-border/50" />
+                    <div className="text-left">
+                      <h4 className="text-xs font-bold text-text-main leading-none mb-1">{test.name}</h4>
+                      <span className="text-[10px] text-text-subtle font-semibold">{test.role}</span>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Footer />
-    </div>
-  </PageTransition>
+        {/* 5.5 LEARNING WALL */}
+        <section className="px-6 py-16 max-w-7xl mx-auto w-full text-left border-t border-border">
+          <ScrollReveal direction="up">
+            <LearningWall />
+          </ScrollReveal>
+        </section>
+   
+        {/* 6. PRICING CARDS */}
+        <section className="pricing-cards-sec bg-bg-elevated/40 border-y border-border py-16 px-6 w-full text-center">
+          <div className="max-w-7xl mx-auto space-y-10">
+            <ScrollReveal direction="up">
+              <div className="max-w-xl mx-auto space-y-2">
+                <Badge variant="secondary" className="border-secondary/35">Simple Plans</Badge>
+                <h2 className="text-3xl font-black text-text-main tracking-tight">Flexible Pricing</h2>
+                <p className="text-xs text-text-subtle font-semibold">Start learning for free and upgrade as your developer career grows.</p>
+              </div>
+            </ScrollReveal>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto text-left">
+              {/* Free */}
+              <div className="h-full pricing-card-gsap">
+                <Card className="bg-surface border border-border p-6 flex flex-col justify-between h-full hover:border-primary watermelon-card-glow-pink">
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-extrabold uppercase text-text-main">Starter Free</h3>
+                      <span className="text-text-subtle text-xs font-semibold">Access to standard public catalog.</span>
+                    </div>
+                    <div className="text-3xl font-black text-text-main">$0 <span className="text-xs text-text-subtle font-bold uppercase">/ Free forever</span></div>
+                    <ul className="space-y-2.5 text-xs text-text-muted font-medium pt-2">
+                      <li>✓ Access to all free courses</li>
+                      <li>✓ Standard video player</li>
+                      <li>✓ Local course progress tracking</li>
+                    </ul>
+                  </div>
+                  <MagneticButton className="w-full mt-8">
+                    <Button variant="outline" className="w-full hover:border-secondary transition-colors" onClick={() => { trackPricingCtaClick('free'); navigate(getStartedPath); }}>
+                      Join Platform
+                    </Button>
+                  </MagneticButton>
+                </Card>
+              </div>
+              
+              {/* Pro */}
+              <div className="h-full pricing-card-gsap">
+                <Card className="bg-surface border border-secondary p-6 flex flex-col justify-between h-full relative watermelon-card-glow-green watermelon-border-gradient">
+                  <Badge variant="secondary" className="absolute top-3 right-3 border-secondary/35 bg-secondary/10 text-secondary z-10">Popular</Badge>
+                  <div className="space-y-4 z-10">
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-extrabold uppercase text-text-main">Pro Learner</h3>
+                      <span className="text-text-subtle text-xs font-semibold">Unlock premium advanced builder content.</span>
+                    </div>
+                    <div className="text-3xl font-black text-text-main">$29 <span className="text-xs text-text-subtle font-bold uppercase">/ monthly</span></div>
+                    <ul className="space-y-2.5 text-xs text-text-muted font-medium pt-2">
+                      <li>✓ Access to ALL courses (Free & Paid)</li>
+                      <li>✓ Interactive final quizzes</li>
+                      <li>✓ Printable completion certificates</li>
+                      <li>✓ Premium downloadable resources</li>
+                    </ul>
+                  </div>
+                  <MagneticButton className="w-full mt-8 z-10">
+                    <Button variant="primary" className="w-full watermelon-card-glow-pink" onClick={() => { trackPricingCtaClick('pro'); navigate('/pricing'); }}>
+                      Upgrade Pro
+                    </Button>
+                  </MagneticButton>
+                </Card>
+              </div>
+
+              {/* Unlimited */}
+              <div className="h-full pricing-card-gsap">
+                <Card className="bg-surface border border-border p-6 flex flex-col justify-between h-full hover:border-primary watermelon-card-glow-pink">
+                  <div className="space-y-4">
+                    <div className="space-y-1">
+                      <h3 className="text-sm font-extrabold uppercase text-text-main">Enterprise Plan</h3>
+                      <span className="text-text-subtle text-xs font-semibold">For dev agencies & scaling SaaS teams.</span>
+                    </div>
+                    <div className="text-3xl font-black text-text-main">$199 <span className="text-xs text-text-subtle font-bold uppercase">/ annually</span></div>
+                    <ul className="space-y-2.5 text-xs text-text-muted font-medium pt-2">
+                      <li>✓ Dedicated team dashboards</li>
+                      <li>✓ Admin user management tables</li>
+                      <li>✓ Custom company certification logos</li>
+                      <li>✓ Priority SLA developer assistance</li>
+                    </ul>
+                  </div>
+                  <MagneticButton className="w-full mt-8">
+                    <Button variant="outline" className="w-full hover:border-secondary transition-colors" onClick={() => { trackPricingCtaClick('enterprise'); navigate('/contact'); }}>
+                      Contact Enterprise
+                    </Button>
+                  </MagneticButton>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 7. FAQ ACCORDION */}
+        <section className="faq-sec px-6 py-16 sm:py-24 max-w-3xl mx-auto w-full text-left space-y-8">
+          <ScrollReveal direction="up">
+            <h2 className="text-3xl font-black text-text-main text-center">Frequently Asked Questions</h2>
+          </ScrollReveal>
+          <div className="faq-gsap">
+            <Accordion
+              items={[
+                {
+                  id: 'faq-1',
+                  title: 'Is The Learning Collective completely frontend-only?',
+                  content: 'Yes! The current system behaves as a full React + TypeScript SPA utilizing localStorage to record user logs, quiz scores, course syllabus builder updates, and role navigation. A cloud-ready API service structure makes backend integration simple later.'
+                },
+                {
+                  id: 'faq-2',
+                  title: 'How do I toggle user roles for student, instructor, and admin?',
+                  content: 'Sign out and click Log In. You can use the pre-built credentials student@thelearningcollective.com (student), instructor@thelearningcollective.com (instructor), or admin@thelearningcollective.com (admin) with passwords (student123, instructor123, admin123) to jump directly into each dashboard.'
+                },
+                {
+                  id: 'faq-3',
+                  title: 'How do I download certificate PDFs?',
+                  content: 'Once you progress through all lessons of a course and score >= passing grade on the final quiz, click Certificates in the student sidebar. Select the course certificate to view, and click "Print / Save PDF" to trigger the browser document dialog.'
+                }
+              ]}
+            />
+          </div>
+        </section>
+
+        {/* CTA sections with morphing background blobs */}
+        <section className="footer-promo-sec bg-surface-muted/25 border-y border-border py-16 px-6 text-center w-full relative overflow-hidden">
+          {/* Background Morphing Blobs */}
+          <div className="absolute right-[-10%] top-[-25%] w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] opacity-15 pointer-events-none -z-10">
+            <AnimeBlobMorph duration={9000} />
+          </div>
+          <div className="absolute left-[-10%] bottom-[-25%] w-[320px] h-[320px] sm:w-[450px] sm:h-[450px] opacity-15 pointer-events-none -z-10 rotate-90">
+            <AnimeBlobMorph duration={12000} />
+          </div>
+
+          <div className="footer-promo-gsap max-w-xl mx-auto space-y-5 z-10">
+            <h2 className="text-2xl sm:text-3xl font-black text-text-main">Ready to share your expertise?</h2>
+            <p className="text-xs text-text-muted">Create instructor accounts, build courses using the syllabus visual outline tool, and track enrolled student progress.</p>
+            <div className="flex justify-center gap-3">
+              <MagneticButton>
+                <Button variant="secondary" onClick={() => navigate('/signup?role=instructor')} className="watermelon-card-glow-pink">
+                  Apply as Instructor
+                </Button>
+              </MagneticButton>
+              <MagneticButton>
+                <Button variant="outline" onClick={() => navigate('/about')} className="hover:border-secondary transition-colors">
+                  Learn More
+                </Button>
+              </MagneticButton>
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
+    </PageTransition>
   );
 };
 
@@ -529,6 +633,11 @@ export const CoursesPage: React.FC = () => {
 
   return (
     <PageTransition>
+      <SEO 
+        title="Courses — The Learning Collective" 
+        description="Explore practical courses in AI, product building, content creation, engineering, and modern digital skills."
+        canonical="/courses"
+      />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
         <AnimatedBackground />
         <PublicNavbar />
@@ -593,8 +702,16 @@ export const CourseDetailsPage: React.FC = () => {
   // Query progress using course?.id to ensure slug URLs don't break local progress keying
   const { enrollment, enroll } = useProgress(course?.id, user?.id);
 
+  useEffect(() => {
+    if (course && !loading) {
+      trackCourseDetailView(course.id);
+    }
+  }, [course?.id, loading]);
+
   const handleEnroll = async () => {
     if (!course) return;
+    trackEnrollClick(course.id);
+    
     if (!user) {
       navigate('/login?redirect=' + encodeURIComponent(window.location.pathname));
       return;
@@ -641,8 +758,27 @@ export const CourseDetailsPage: React.FC = () => {
     );
   }
 
+  const courseStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": course.title,
+    "description": course.description,
+    "provider": {
+      "@type": "Organization",
+      "name": "The Learning Collective",
+      "sameAs": "https://course-website-pages.kalthiyaheet.workers.dev"
+    }
+  };
+
   return (
     <PageTransition>
+      <SEO 
+        title={`${course.title} — The Learning Collective`}
+        description={course.description}
+        canonical={`/course/${course.id}`}
+        ogType="course"
+        structuredData={courseStructuredData}
+      />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
         <AnimatedBackground />
         <PublicNavbar />
@@ -809,6 +945,11 @@ export const PricingPage: React.FC = () => {
   const navigate = useNavigate();
   return (
     <PageTransition>
+      <SEO 
+        title="Pricing — The Learning Collective"
+        description="Choose a learning plan that fits your goals and start building practical skills."
+        canonical="/pricing"
+      />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
         <AnimatedBackground />
         <PublicNavbar />
@@ -838,7 +979,7 @@ export const PricingPage: React.FC = () => {
                   </ul>
                 </div>
                 <MagneticButton className="w-full mt-8">
-                  <Button variant="outline" className="w-full" onClick={() => navigate('/signup')}>
+                  <Button variant="outline" className="w-full" onClick={() => { trackPricingCtaClick('free'); navigate('/signup'); }}>
                     Sign Up Free
                   </Button>
                 </MagneticButton>
@@ -863,7 +1004,7 @@ export const PricingPage: React.FC = () => {
                   </ul>
                 </div>
                 <MagneticButton className="w-full mt-8">
-                  <Button variant="primary" className="w-full" onClick={() => navigate('/signup?tier=pro')}>
+                  <Button variant="primary" className="w-full" onClick={() => { trackPricingCtaClick('pro'); navigate('/signup?tier=pro'); }}>
                     Subscribe Pro
                   </Button>
                 </MagneticButton>
@@ -887,7 +1028,7 @@ export const PricingPage: React.FC = () => {
                   </ul>
                 </div>
                 <MagneticButton className="w-full mt-8">
-                  <Button variant="outline" className="w-full" onClick={() => navigate('/contact')}>
+                  <Button variant="outline" className="w-full" onClick={() => { trackPricingCtaClick('enterprise'); navigate('/contact'); }}>
                     Contact Team Sales
                   </Button>
                 </MagneticButton>
@@ -907,6 +1048,11 @@ export const PricingPage: React.FC = () => {
 export const AboutPage: React.FC = () => {
   return (
     <PageTransition>
+      <SEO 
+        title="About — The Learning Collective"
+        description="Learn about The Learning Collective and our mission to make practical skill-based learning accessible."
+        canonical="/about"
+      />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
         <AnimatedBackground />
         <PublicNavbar />
@@ -958,23 +1104,54 @@ export const AboutPage: React.FC = () => {
 // ==========================================
 // 6. CONTACT PAGE
 // ==========================================
+import { mockApi } from '../lib/api';
+
 export const ContactPage: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
   const [msg, setMsg] = useState('');
+  
+  const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [turnstileToken, setTurnstileToken] = useState<string | undefined>();
+  const siteKey = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email || !msg) return;
-    setSent(true);
-    setName('');
-    setEmail('');
-    setMsg('');
+    if (!name || !email || !subject || !msg) {
+      setErrorMsg('Please fill in all fields.');
+      return;
+    }
+    
+    setLoading(true);
+    setErrorMsg('');
+    
+    try {
+      await mockApi.submitContact({
+        name, email, subject, message: msg, turnstileToken
+      });
+      trackContactSuccess();
+      setSent(true);
+      setName('');
+      setEmail('');
+      setSubject('');
+      setMsg('');
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Failed to send message. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <PageTransition>
+      <SEO 
+        title="Contact — The Learning Collective"
+        description="Contact The Learning Collective for course questions, support, partnerships, and feedback."
+        canonical="/contact"
+      />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
         <AnimatedBackground />
         <PublicNavbar />
@@ -1000,11 +1177,30 @@ export const ContactPage: React.FC = () => {
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-4">
-                    <Input label="Name" placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} required />
-                    <Input label="Email address" type="email" placeholder="john@company.com" value={email} onChange={e => setEmail(e.target.value)} required />
-                    <Textarea label="Message" placeholder="Type your query..." value={msg} onChange={e => setMsg(e.target.value)} required />
+                    {errorMsg && (
+                      <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-md text-red-500 text-xs font-medium">
+                        {errorMsg}
+                      </div>
+                    )}
+                    <Input label="Name" placeholder="John Doe" value={name} onChange={e => setName(e.target.value)} required disabled={loading} />
+                    <Input label="Email address" type="email" placeholder="john@company.com" value={email} onChange={e => setEmail(e.target.value)} required disabled={loading} />
+                    <Input label="Subject" placeholder="How can we help?" value={subject} onChange={e => setSubject(e.target.value)} required disabled={loading} />
+                    <Textarea label="Message" placeholder="Type your query..." value={msg} onChange={e => setMsg(e.target.value)} required disabled={loading} />
+                    
+                    {siteKey && (
+                      <div className="pt-2">
+                        <Turnstile 
+                          siteKey={siteKey} 
+                          onSuccess={(token) => setTurnstileToken(token)}
+                          onError={() => setErrorMsg('Security check failed. Please refresh the page.')}
+                        />
+                      </div>
+                    )}
+                    
                     <div className="pt-2">
-                      <Button type="submit" className="w-full" icon={<Send className="h-4 w-4" />}>Send Message</Button>
+                      <Button type="submit" className="w-full" disabled={loading || (siteKey && !turnstileToken)} icon={!loading && <Send className="h-4 w-4" />}>
+                        {loading ? 'Sending...' : 'Send Message'}
+                      </Button>
                     </div>
                   </form>
                 )}
@@ -1052,8 +1248,53 @@ export const ContactPage: React.FC = () => {
 // 7. FAQ PAGE
 // ==========================================
 export const FaqPage: React.FC = () => {
+  const faqStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What credentials do I use to view the Student, Instructor, and Admin dashboards?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Click Log In. Log in with (student@thelearningcollective.com / student123) for student views, (instructor@thelearningcollective.com / instructor123) for instructor course designer views, or (admin@thelearningcollective.com / admin123) for user moderation queues."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are final course certificates verified?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! Every generated certificate records unique ID strings (e.g. TLC-CERT-xxxx-xxxxxx) that map directly to our user database. Students print or save certificates to PDF directly from their Certificate tab."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How does local database replication work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "On the first mount, the application checks localStorage. If empty, it populates it with verified courses, syllabus structures, and dummy user profiles. Progress checkboxes and new courses save to localStorage immediately."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is there a dark mode option available?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes, the portal includes dark mode toggles inside the top header of all Student, Instructor, and Admin dashboard pages, adapting color variables to dark charcoal surfaces."
+        }
+      }
+    ]
+  };
+
   return (
     <PageTransition>
+      <SEO 
+        title="FAQ — The Learning Collective"
+        description="Find answers about courses, enrollment, certificates, accounts, and learning support."
+        canonical="/faq"
+        structuredData={faqStructuredData}
+      />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
         <AnimatedBackground />
         <PublicNavbar />
