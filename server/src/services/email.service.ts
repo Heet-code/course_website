@@ -5,7 +5,7 @@ const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
 const FROM_EMAIL = 'The Learning Collective <onboarding@resend.dev>'; // In production, use verified domain
 
 // Helper for gracefully handling missing Resend API keys
-const sendEmail = async (options: { to: string; subject: string; html: string; text: string }) => {
+export const sendEmail = async (options: { to: string; subject: string; html: string; text: string }) => {
   if (!resend) {
     console.log(`[Email Service Mock] Would send to ${options.to}: ${options.subject}`);
     return;

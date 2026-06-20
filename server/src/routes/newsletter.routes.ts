@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { subscribe } from '../controllers/newsletter.controller';
-import { rateLimiter } from '../middleware/rateLimit.middleware';
+import { apiRateLimiter } from '../middleware/rateLimit.middleware';
 
 const router = Router();
 
-router.post('/', rateLimiter, subscribe);
+router.post('/', apiRateLimiter, subscribe);
 
 export default router;
