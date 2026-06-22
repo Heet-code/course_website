@@ -2,9 +2,9 @@
 
 ## Identity
 
-- **Design system name:** The Learning Collective
-- **Project name:** The Learning Collective
-- **Project logo:** logo.png
+- **Design system name:** Veloria Academy
+- **Project name:** Veloria Academy
+- **Project logo:** veloria-academy-logo.png
 
 ## Logo Usage
 

@@ -1,6 +1,6 @@
 # Production Deployment Guide
 
-This guide details the final manual steps required to deploy and verify **The Learning Collective** on Cloudflare Pages, Render, and MongoDB Atlas.
+This guide details the final manual steps required to deploy and verify **Veloria Academy** on Cloudflare Pages, Render, and MongoDB Atlas.
 
 ## 1. MongoDB Atlas Setup
 - Create an organization and deploy a free-tier cluster.

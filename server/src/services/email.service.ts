@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 import { env } from '../config/env';
 
 const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
-const FROM_EMAIL = 'The Learning Collective <onboarding@resend.dev>'; // In production, use verified domain
+const FROM_EMAIL = 'Veloria Academy <onboarding@resend.dev>'; // In production, use verified domain
 
 // Helper for gracefully handling missing Resend API keys
 export const sendEmail = async (options: { to: string; subject: string; html: string; text: string }) => {
@@ -29,11 +29,11 @@ export const emailService = {
   async sendWelcomeEmail(email: string, name: string) {
     await sendEmail({
       to: email,
-      subject: 'Welcome to The Learning Collective!',
-      text: `Hi ${name},\n\nWelcome to The Learning Collective! We're excited to have you on board to build practical, real-world skills.\n\nHappy Learning,\nThe Team`,
+      subject: 'Welcome to Veloria Academy!',
+      text: `Hi ${name},\n\nWelcome to Veloria Academy! We're excited to have you on board to build practical, real-world skills.\n\nHappy Learning,\nThe Team`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #111827;">Welcome to The Learning Collective!</h2>
+          <h2 style="color: #111827;">Welcome to Veloria Academy!</h2>
           <p>Hi ${name},</p>
           <p>We're excited to have you on board. You're now ready to start exploring courses and building practical, real-world skills.</p>
           <p>
@@ -49,7 +49,7 @@ export const emailService = {
     const resetUrl = `${env.CLIENT_URL}/reset-password?token=${token}`;
     await sendEmail({
       to: email,
-      subject: 'Password Reset Request - The Learning Collective',
+      subject: 'Password Reset Request - Veloria Academy',
       text: `Hi ${name},\n\nYou requested a password reset. Click the link below to reset your password. This link expires in 1 hour.\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">

@@ -1,7 +1,7 @@
 {
-  "name": "the-learning-collective-backend",
+  "name": "veloria-academy-backend",
   "version": "1.0.0",
-  "description": "Secure, Cloudflare-ready backend for The Learning Collective LMS",
+  "description": "Secure, Cloudflare-ready backend for Veloria Academy LMS",
   "main": "dist/server.js",
   "type": "commonjs",
   "scripts": {

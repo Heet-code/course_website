@@ -1,6 +1,6 @@
 # Production Security Checklist
 
-Before launching The Learning Collective, strictly verify the following configurations across your hosting providers.
+Before launching Veloria Academy, strictly verify the following configurations across your hosting providers.
 
 ## 1. Render (Backend API)
 Ensure your Render Web Service environment variables strictly match the following. **Do not commit these to source control.**

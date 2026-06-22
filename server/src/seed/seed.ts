@@ -53,7 +53,7 @@ const seedData = async () => {
       passwordHash: 'admin123', // Will be hashed by pre-save hook
       role: 'admin',
       avatarUrl: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=150',
-      bio: 'Lead Platform Administrator for The Learning Collective.',
+      bio: 'Lead Platform Administrator for Veloria Academy.',
       joinedDate: new Date('2023-03-01'),
     });
 

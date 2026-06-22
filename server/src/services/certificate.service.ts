@@ -44,7 +44,7 @@ export class CertificateService {
     // Generate unique credential code
     const uniquePart1 = Math.random().toString(36).substring(2, 6).toUpperCase();
     const uniquePart2 = Math.random().toString(36).substring(2, 8).toUpperCase();
-    const credentialId = `TLC-CERT-${uniquePart1}-${uniquePart2}`;
+    const credentialId = `Veloria Academy-CERT-${uniquePart1}-${uniquePart2}`;
 
     const certificate = await Certificate.create({
       courseId: course._id,

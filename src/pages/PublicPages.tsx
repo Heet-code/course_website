@@ -58,13 +58,13 @@ export const LandingPage: React.FC = () => {
     "@graph": [
       {
         "@type": "Organization",
-        "name": "The Learning Collective",
+        "name": "Veloria Academy",
         "url": "https://course-website-pages.kalthiyaheet.workers.dev",
         "logo": "https://course-website-pages.kalthiyaheet.workers.dev/og-image.png"
       },
       {
         "@type": "WebSite",
-        "name": "The Learning Collective",
+        "name": "Veloria Academy",
         "url": "https://course-website-pages.kalthiyaheet.workers.dev"
       }
     ]
@@ -204,11 +204,16 @@ export const LandingPage: React.FC = () => {
         <section className="relative px-6 py-8 sm:py-16 max-w-7xl mx-auto text-left w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           <div className="lg:col-span-7 space-y-6 z-10">
             <PageEnter.Item delay={0.15}>
-              <Badge variant="primary" className="border-primary/30">Next Generation Learning</Badge>
+              <Badge variant="primary" className="border-primary/30">Live classes coming soon</Badge>
             </PageEnter.Item>
             
             <div className="space-y-2">
               <PageEnter.Item delay={0.25} y={15}>
+                <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-text-main tracking-tight leading-[1.05]">
+                  <TextEffect variant="blur-in" per="word" delay={0.1}>Veloria Academy —</TextEffect>
+                </span>
+              </PageEnter.Item>
+              <PageEnter.Item delay={0.30} y={15}>
                 <span className="block text-4xl sm:text-5xl lg:text-6xl font-black text-text-main tracking-tight leading-[1.05]">
                   <TextEffect variant="blur-in" per="word" delay={0.1}>Learn practical skills</TextEffect>
                 </span>
@@ -229,7 +234,7 @@ export const LandingPage: React.FC = () => {
 
             <PageEnter.Item delay={0.45}>
               <p className="text-base sm:text-lg text-text-muted leading-relaxed max-w-xl font-normal">
-                The Learning Collective helps you start learning now with practical guides, PDF notes, and online resources. Live classes and structured cohorts will launch soon.
+                Veloria Academy helps learners build real-world skills with practical guides, PDF notes, online resources, and beginner-friendly learning paths. Live classes and structured cohorts are coming soon.
               </p>
             </PageEnter.Item>
 
@@ -567,7 +572,7 @@ export const LandingPage: React.FC = () => {
               items={[
                 {
                   id: 'faq-1',
-                  title: 'Is The Learning Collective completely frontend-only?',
+                  title: 'Is Veloria Academy completely frontend-only?',
                   content: 'Yes! The current system behaves as a full React + TypeScript SPA utilizing localStorage to record user logs, quiz scores, course syllabus builder updates, and role navigation. A cloud-ready API service structure makes backend integration simple later.'
                 },
                 {
@@ -639,7 +644,7 @@ export const CoursesPage: React.FC = () => {
   return (
     <PageTransition>
       <SEO 
-        title="Courses — The Learning Collective" 
+        title="Learning Library — Veloria Academy" 
         description="Explore practical courses in AI, product building, content creation, engineering, and modern digital skills."
         canonical="/courses"
       />
@@ -770,7 +775,7 @@ export const CourseDetailsPage: React.FC = () => {
     "description": course.description,
     "provider": {
       "@type": "Organization",
-      "name": "The Learning Collective",
+      "name": "Veloria Academy",
       "sameAs": "https://course-website-pages.kalthiyaheet.workers.dev"
     }
   };
@@ -778,7 +783,7 @@ export const CourseDetailsPage: React.FC = () => {
   return (
     <PageTransition>
       <SEO 
-        title={`${course.title} — The Learning Collective`}
+        title={`${course.title} — Veloria Academy`}
         description={course.description}
         canonical={`/course/${course.id}`}
         ogType="course"
@@ -939,7 +944,7 @@ export const PricingPage: React.FC = () => {
   return (
     <PageTransition>
       <SEO 
-        title="Pricing — The Learning Collective"
+        title="Pricing — Veloria Academy"
         description="Choose a learning plan that fits your goals and start building practical skills."
         canonical="/pricing"
       />
@@ -1042,8 +1047,8 @@ export const AboutPage: React.FC = () => {
   return (
     <PageTransition>
       <SEO 
-        title="About — The Learning Collective"
-        description="Learn about The Learning Collective and our mission to make practical skill-based learning accessible."
+        title="About Veloria Academy"
+        description="Learn about Veloria Academy and our mission to make practical skill-based learning accessible."
         canonical="/about"
       />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
@@ -1053,7 +1058,7 @@ export const AboutPage: React.FC = () => {
           <ScrollReveal direction="up">
             <div className="space-y-2">
               <Badge variant="primary">Our Story</Badge>
-              <h1 className="text-3xl font-black text-text-main tracking-tight">About The Learning Collective</h1>
+              <h1 className="text-3xl font-black text-text-main tracking-tight">About Veloria Academy</h1>
               <p className="text-xs text-text-muted">An educational platform designed for readability, clean spacing, and offline durability.</p>
             </div>
           </ScrollReveal>
@@ -1061,7 +1066,7 @@ export const AboutPage: React.FC = () => {
           <ScrollReveal direction="up" delay={0.2}>
             <Card className="p-6 bg-surface border border-border leading-relaxed text-sm text-text-muted space-y-4">
               <p>
-                The Learning Collective was conceptualized to address modern education portal fatigue. Too often, learning tools are clogged with slow API bundles, distracting layouts, and inconsistent user experiences.
+                Veloria Academy was conceptualized to address modern education portal fatigue. Too often, learning tools are clogged with slow API bundles, distracting layouts, and inconsistent user experiences.
               </p>
               <p>
                 We adhere strictly to the <strong>Bento Design System</strong>. By boxing dashboard stats, course syllabus builders, and video players into rigid cells, students read content with structured focus.
@@ -1141,8 +1146,8 @@ export const ContactPage: React.FC = () => {
   return (
     <PageTransition>
       <SEO 
-        title="Contact — The Learning Collective"
-        description="Contact The Learning Collective for course questions, support, partnerships, and feedback."
+        title="Contact Veloria Academy"
+        description="Contact Veloria Academy for course questions, support, partnerships, and feedback."
         canonical="/contact"
       />
       <div className="flex flex-col min-h-screen bg-bg relative overflow-hidden">
@@ -1258,7 +1263,7 @@ export const FaqPage: React.FC = () => {
         "name": "Are final course certificates verified?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes! Every generated certificate records unique ID strings (e.g. TLC-CERT-xxxx-xxxxxx) that map directly to our user database. Students print or save certificates to PDF directly from their Certificate tab."
+          "text": "Yes! Every generated certificate records unique ID strings (e.g. Veloria Academy-CERT-xxxx-xxxxxx) that map directly to our user database. Students print or save certificates to PDF directly from their Certificate tab."
         }
       },
       {
@@ -1283,7 +1288,7 @@ export const FaqPage: React.FC = () => {
   return (
     <PageTransition>
       <SEO 
-        title="FAQ — The Learning Collective"
+        title="FAQ — Veloria Academy"
         description="Find answers about courses, enrollment, certificates, accounts, and learning support."
         canonical="/faq"
         structuredData={faqStructuredData}
@@ -1311,7 +1316,7 @@ export const FaqPage: React.FC = () => {
                 {
                   id: 'faq-b',
                   title: 'Are final course certificates verified?',
-                  content: 'Yes! Every generated certificate records unique ID strings (e.g. TLC-CERT-xxxx-xxxxxx) that map directly to our user database. Students print or save certificates to PDF directly from their Certificate tab.'
+                  content: 'Yes! Every generated certificate records unique ID strings (e.g. Veloria Academy-CERT-xxxx-xxxxxx) that map directly to our user database. Students print or save certificates to PDF directly from their Certificate tab.'
                 },
                 {
                   id: 'faq-c',
@@ -1336,14 +1341,14 @@ export const FaqPage: React.FC = () => {
 export const TermsPage: React.FC = () => {
   return (
     <PageTransition>
-      <SEO title="Terms of Service — The Learning Collective" />
+      <SEO title="Terms of Service — Veloria Academy" />
       <div className="flex flex-col min-h-screen bg-bg">
         <PublicNavbar />
         <main className="flex-grow max-w-4xl mx-auto px-6 py-24 text-left">
           <h1 className="text-3xl font-black text-text-main mb-6">Terms of Service</h1>
           <p className="text-text-muted leading-relaxed mb-4">Effective Date: {new Date().getFullYear()}</p>
           <div className="space-y-6 text-sm text-text-muted leading-relaxed">
-            <p>Welcome to The Learning Collective. By accessing our platform, you agree to these terms.</p>
+            <p>Welcome to Veloria Academy. By accessing our platform, you agree to these terms.</p>
             <h2 className="text-xl font-bold text-text-main mt-8 mb-4">1. Acceptance of Terms</h2>
             <p>By using our services, you confirm that you accept these terms of use and that you agree to comply with them.</p>
             <h2 className="text-xl font-bold text-text-main mt-8 mb-4">2. Accessing the Platform</h2>
@@ -1360,14 +1365,14 @@ export const TermsPage: React.FC = () => {
 export const PrivacyPage: React.FC = () => {
   return (
     <PageTransition>
-      <SEO title="Privacy Policy — The Learning Collective" />
+      <SEO title="Privacy Policy — Veloria Academy" />
       <div className="flex flex-col min-h-screen bg-bg">
         <PublicNavbar />
         <main className="flex-grow max-w-4xl mx-auto px-6 py-24 text-left">
           <h1 className="text-3xl font-black text-text-main mb-6">Privacy Policy</h1>
           <p className="text-text-muted leading-relaxed mb-4">Effective Date: {new Date().getFullYear()}</p>
           <div className="space-y-6 text-sm text-text-muted leading-relaxed">
-            <p>At The Learning Collective, we respect your privacy and are committed to protecting your personal data.</p>
+            <p>At Veloria Academy, we respect your privacy and are committed to protecting your personal data.</p>
             <h2 className="text-xl font-bold text-text-main mt-8 mb-4">1. Data We Collect</h2>
             <p>We may collect, use, store and transfer different kinds of personal data about you, including identity and contact data.</p>
             <h2 className="text-xl font-bold text-text-main mt-8 mb-4">2. How We Use Your Data</h2>

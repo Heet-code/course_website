@@ -56,7 +56,7 @@ export const PublicNavbar: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo Mark */}
-          <Link to="/" className="focus:outline-none" aria-label="The Learning Collective">
+          <Link to="/" className="focus:outline-none" aria-label="Veloria Academy">
             <BrandMark variant="light" />
           </Link>
 
@@ -241,7 +241,7 @@ export const DashboardSidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) =>
       <Link 
         to={`/${user.role}/dashboard`}
         className="h-16 flex items-center px-5 border-b border-border bg-bg-elevated focus:outline-none" 
-        aria-label="The Learning Collective"
+        aria-label="Veloria Academy"
       >
         <BrandMark variant={isDark ? 'dark' : 'light'} />
       </Link>
@@ -427,7 +427,7 @@ export const Footer: React.FC = () => {
     <footer className="bg-surface border-t border-border py-12 px-6">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
         <div className="space-y-4 text-left">
-          <Link to="/" className="focus:outline-none" aria-label="The Learning Collective">
+          <Link to="/" className="focus:outline-none" aria-label="Veloria Academy">
             <BrandMark variant={isDark ? 'dark' : 'light'} />
           </Link>
           <p className="text-xs text-text-muted leading-relaxed">
@@ -463,7 +463,7 @@ export const Footer: React.FC = () => {
       <hr className="border-border mb-6" />
       
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs text-text-subtle font-semibold gap-4">
-        <span>© {new Date().getFullYear()} The Learning Collective. All rights reserved.</span>
+        <span>© {new Date().getFullYear()} Veloria Academy. All rights reserved.</span>
         <div className="flex gap-4">
           <Link to="/terms" className="hover:text-secondary cursor-pointer">Terms of Service</Link>
           <Link to="/privacy" className="hover:text-secondary cursor-pointer">Privacy Policy</Link>
@@ -491,7 +491,7 @@ export const AuthLayout: React.FC<{ children: React.ReactNode; subtitle: string 
       <div className="min-h-screen bg-bg relative overflow-hidden flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <AnimatedBackground />
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <Link to="/" className="block focus:outline-none mb-6" aria-label="The Learning Collective">
+          <Link to="/" className="block focus:outline-none mb-6" aria-label="Veloria Academy">
             <BrandMark variant={isDark ? 'dark' : 'light'} layout="vertical" />
           </Link>
           <h2 className="text-center text-2xl font-black text-text-main tracking-tight">
@@ -517,7 +517,7 @@ export const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ child
 
   return (
     <>
-      <SEO title="Dashboard — The Learning Collective" noIndex />
+      <SEO title="Dashboard — Veloria Academy" noIndex />
       <div className="min-h-screen bg-bg flex">
       {/* Sidebar navigation */}
       <DashboardSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />

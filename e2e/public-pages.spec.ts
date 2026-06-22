@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Public Pages Routing and Rendering', () => {
   const routes = [
-    { path: '/', title: 'The Learning Collective' },
+    { path: '/', title: 'Veloria Academy' },
     { path: '/courses', title: 'Courses' },
     { path: '/pricing', title: 'Pricing' },
     { path: '/about', title: 'About' },

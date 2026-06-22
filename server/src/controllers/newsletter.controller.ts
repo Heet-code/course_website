@@ -29,13 +29,13 @@ export const subscribe = async (req: Request, res: Response) => {
     try {
       await sendEmail({
         to: email,
-        subject: 'You joined The Learning Collective waitlist',
+        subject: 'You joined Veloria Academy waitlist',
         text: 'Thanks for joining. We will notify you when live classes start.',
         html: `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
             <h2>You're on the waitlist!</h2>
-            <p>Thanks for joining The Learning Collective waitlist. We will notify you as soon as live classes start.</p>
-            <p>Best,<br/>The Learning Collective Team</p>
+            <p>Thanks for joining Veloria Academy waitlist. We will notify you as soon as live classes start.</p>
+            <p>Best,<br/>Veloria Academy Team</p>
           </div>
         `
       });

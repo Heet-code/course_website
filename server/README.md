@@ -1,6 +1,6 @@
-# The Learning Collective Backend
+# Veloria Academy Backend
 
-Production-ready, secure, Express + TypeScript + MongoDB backend architecture for **The Learning Collective LMS**.
+Production-ready, secure, Express + TypeScript + MongoDB backend architecture for **Veloria Academy LMS**.
 
 ## Security Standard
 - **No Client Secrets:** All private credentials, database URLs, and JWT secrets are kept entirely on the server.

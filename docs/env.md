@@ -1,6 +1,6 @@
 # Environment Variables Configuration Guide
 
-The Learning Collective relies on strict segregation between public frontend variables and secret backend variables.
+Veloria Academy relies on strict segregation between public frontend variables and secret backend variables.
 
 ## Cloudflare Pages (Frontend)
 These variables are baked into the static React bundle. They are **safe** to be public.

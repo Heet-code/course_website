@@ -26,7 +26,7 @@ export const SEO: React.FC<SEOProps> = ({
   noIndex = false,
   structuredData,
 }) => {
-  const siteName = 'The Learning Collective';
+  const siteName = 'Veloria Academy';
   const defaultTitle = `${siteName} — Practical Courses for Modern Skills`;
   const defaultDescription = 'Learn practical skills through focused courses, guided projects, and collaborative learning experiences.';
   const siteUrl = 'https://course-website-pages.kalthiyaheet.workers.dev';

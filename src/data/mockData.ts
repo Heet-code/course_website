@@ -28,7 +28,7 @@ export const mockUsers: User[] = [
     role: 'admin',
     avatarUrl: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=150',
     joinedDate: 'Mar 01, 2023',
-    bio: 'Lead Platform Administrator for The Learning Collective.'
+    bio: 'Lead Platform Administrator for Veloria Academy.'
   }
 ];
 
@@ -52,7 +52,7 @@ export const mockCertificates: Certificate[] = [
     instructorName: 'Dr. Evelyn Sterling',
     recipientAvatarUrl: '',
     issueDate: 'May 12, 2026',
-    credentialId: 'TLC-CERT-AI-1029410'
+    credentialId: 'Veloria Academy-CERT-AI-1029410'
   }
 ];
 
@@ -99,7 +99,7 @@ export const mockCourseApprovals: CourseApproval[] = [
 export const mockNotifications = [
   {
     id: 'notif-1',
-    title: 'Welcome to The Learning Collective!',
+    title: 'Welcome to Veloria Academy!',
     message: 'Explore the bento course catalog and start your learning journey.',
     time: '2 hours ago',
     read: false

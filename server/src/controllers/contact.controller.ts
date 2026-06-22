@@ -23,12 +23,12 @@ export const submitContact = asyncHandler(async (req: Request, res: Response) =>
   if (resend && env.CONTACT_RECEIVER_EMAIL) {
     try {
       await resend.emails.send({
-        from: 'The Learning Collective <onboarding@resend.dev>', // Use verified domain in production
+        from: 'Veloria Academy <onboarding@resend.dev>', // Use verified domain in production
         to: env.CONTACT_RECEIVER_EMAIL,
         replyTo: email,
         subject: `New Contact Form Submission: ${subject}`,
         html: `
-          <h3>New Message from The Learning Collective</h3>
+          <h3>New Message from Veloria Academy</h3>
           <p><strong>Name:</strong> ${name}</p>
           <p><strong>Email:</strong> ${email}</p>
           <p><strong>Subject:</strong> ${subject}</p>

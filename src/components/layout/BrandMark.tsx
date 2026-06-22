@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImg from '../../assets/logo.png';
+import logoImg from '../../../public/brand/veloria-academy-logo.png';
 
 interface BrandMarkProps {
   variant?: 'light' | 'dark';
@@ -20,7 +20,7 @@ export const BrandMark: React.FC<BrandMarkProps> = ({
       {/* Original Logo Image */}
       <img 
         src={logoImg} 
-        alt="The Learning Collective logo" 
+        alt="Veloria Academy logo" 
         className={`${
           isVertical 
             ? 'h-[72px] sm:h-[96px]' 
@@ -43,11 +43,11 @@ export const BrandMark: React.FC<BrandMarkProps> = ({
           }}
         >
           {isVertical ? (
-            <span>The Learning Collective</span>
+            <span>Veloria Academy</span>
           ) : (
             <>
-              <span className="hidden min-[380px]:inline">The Learning Collective</span>
-              <span className="inline min-[380px]:hidden">TLC</span>
+              <span className="hidden min-[380px]:inline">Veloria Academy</span>
+              <span className="inline min-[380px]:hidden">Veloria Academy</span>
             </>
           )}
         </span>

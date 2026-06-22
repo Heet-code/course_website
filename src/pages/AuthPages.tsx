@@ -163,8 +163,8 @@ export const LoginPage: React.FC = () => {
 
   return (
     <>
-      <SEO title="Login — The Learning Collective" noIndex />
-      <AuthLayout subtitle="Sign in to The Learning Collective">
+      <SEO title="Login — Veloria Academy" noIndex />
+      <AuthLayout subtitle="Sign in to Veloria Academy">
       <form onSubmit={handleSubmit} className="space-y-5">
         {error && (
           <div className="p-3 bg-danger/10 text-text-main border border-danger/30 rounded-ctrl text-xs font-semibold text-left">
@@ -388,8 +388,8 @@ export const SignupPage: React.FC = () => {
 
   return (
     <>
-      <SEO title="Sign Up — The Learning Collective" noIndex />
-      <AuthLayout subtitle="Join The Learning Collective">
+      <SEO title="Sign Up — Veloria Academy" noIndex />
+      <AuthLayout subtitle="Join Veloria Academy">
       <form onSubmit={handleSubmit} className="space-y-4">
         {error && (
           <div className="p-3 bg-danger/10 text-text-main border border-danger/30 rounded-ctrl text-xs font-semibold text-left">
@@ -505,8 +505,8 @@ export const ForgotPasswordPage: React.FC = () => {
 
   return (
     <>
-      <SEO title="Forgot Password — The Learning Collective" noIndex />
-      <AuthLayout subtitle="Reset password | The Learning Collective">
+      <SEO title="Forgot Password — Veloria Academy" noIndex />
+      <AuthLayout subtitle="Reset password | Veloria Academy">
       {sent ? (
         <div className="py-6 text-center space-y-3">
           <Badge variant="primary">Link Sent</Badge>
@@ -605,8 +605,8 @@ export const ResetPasswordPage: React.FC = () => {
 
   return (
     <>
-      <SEO title="Reset Password — The Learning Collective" noIndex />
-      <AuthLayout subtitle="Choose new password | The Learning Collective">
+      <SEO title="Reset Password — Veloria Academy" noIndex />
+      <AuthLayout subtitle="Choose new password | Veloria Academy">
       {success ? (
         <div className="py-6 text-center space-y-3">
           <Badge variant="success">Password Reset!</Badge>
@@ -665,7 +665,7 @@ export const OtpVerificationPage: React.FC = () => {
   };
 
   return (
-    <AuthLayout subtitle="Verify Security Code | The Learning Collective">
+    <AuthLayout subtitle="Verify Security Code | Veloria Academy">
       <form onSubmit={handleSubmit} className="space-y-4">
         <p className="text-xs text-text-muted text-left leading-relaxed">
           Type the 6-digit verification code sent to your email.

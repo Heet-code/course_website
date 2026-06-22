@@ -1,6 +1,6 @@
 # Privacy-Friendly Analytics Architecture
 
-The Learning Collective implements a custom, privacy-first analytics solution combining Cloudflare Web Analytics (for page views and web vitals) with a custom backend event tracking system for LMS-specific conversion and engagement events.
+Veloria Academy implements a custom, privacy-first analytics solution combining Cloudflare Web Analytics (for page views and web vitals) with a custom backend event tracking system for LMS-specific conversion and engagement events.
 
 ## Cloudflare Web Analytics
 A privacy-first, cookie-free web analytics service provided by Cloudflare. 

@@ -222,7 +222,7 @@ export const CourseHero: React.FC<CourseHeroProps> = ({
         {/* Course specs list */}
         <div className="flex flex-wrap items-center gap-6 text-xs text-text-subtle font-bold uppercase">
           <span className="flex items-center gap-1.5"><Clock className="h-4 w-4 text-secondary" /> Read Time: {course.readingTime || 30} mins</span>
-          <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-secondary" /> Author: {course.author || course.instructorName || 'The Learning Collective'}</span>
+          <span className="flex items-center gap-1.5"><User className="h-4 w-4 text-secondary" /> Author: {course.author || course.instructorName || 'Veloria Academy'}</span>
         </div>
 
         <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">

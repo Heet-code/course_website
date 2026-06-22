@@ -1,7 +1,7 @@
 # Security Architecture
 
 ## Authentication & Sessions
-The Learning Collective utilizes a stateless backend utilizing JWT tokens stored securely inside `httpOnly` HTTP cookies. 
+Veloria Academy utilizes a stateless backend utilizing JWT tokens stored securely inside `httpOnly` HTTP cookies. 
 No session secrets, database credentials, or API keys are ever stored in frontend logic or `localStorage`.
 
 ### Cookie SameSite Limitation

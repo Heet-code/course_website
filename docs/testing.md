@@ -1,6 +1,6 @@
 # Testing Infrastructure
 
-The Learning Collective uses a modern, CI-ready testing infrastructure ensuring application stability across units, components, and End-to-End user flows.
+Veloria Academy uses a modern, CI-ready testing infrastructure ensuring application stability across units, components, and End-to-End user flows.
 
 ## 1. Running Unit Tests (Vitest)
 Unit and Component tests run via Vitest, ensuring our baseline React components (Buttons, Inputs, Contexts, Sanitizers) render correctly and manage state as expected.
