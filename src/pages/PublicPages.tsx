@@ -1348,12 +1348,33 @@ export const TermsPage: React.FC = () => {
           <h1 className="text-3xl font-black text-text-main mb-6">Terms of Service</h1>
           <p className="text-text-muted leading-relaxed mb-4">Effective Date: {new Date().getFullYear()}</p>
           <div className="space-y-6 text-sm text-text-muted leading-relaxed">
-            <p>Welcome to Veloria Academy. By accessing our platform, you agree to these terms.</p>
-            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">1. Acceptance of Terms</h2>
-            <p>By using our services, you confirm that you accept these terms of use and that you agree to comply with them.</p>
-            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">2. Accessing the Platform</h2>
-            <p>We do not guarantee that our site, or any content on it, will always be available or be uninterrupted.</p>
-            <p className="mt-8 italic">This is a placeholder Terms of Service page. A full legal document will be provided later.</p>
+            <p>Welcome to Veloria Academy. By accessing or using our platform, website, or services, you agree to be bound by these Terms of Service. If you do not agree to all of the terms and conditions, you must not access or use our services.</p>
+            
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">1. Acceptance of Terms & Modifications</h2>
+            <p>By using our services, you confirm that you accept these terms of use and that you agree to comply with them. We reserve the right to update, change, or replace any part of these Terms of Service at our sole discretion without prior notice. Your continued use of the platform following the posting of any changes constitutes acceptance of those changes.</p>
+            
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">2. Disclaimer of Warranties; "AS-IS" Basis</h2>
+            <p className="uppercase font-bold text-text-main">THE SERVICES AND ALL INCLUDED CONTENT ARE PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS WITHOUT WARRANTY OF ANY KIND, WHETHER EXPRESS OR IMPLIED.</p>
+            <p>Veloria Academy specifically disclaims any and all warranties and conditions of merchantability, fitness for a particular purpose, and non-infringement, and any warranties arising out of course of dealing or usage of trade. We make no warranty that the services will meet your requirements or be available on an uninterrupted, secure, or error-free basis. We make no warranty regarding the quality, accuracy, timeliness, truthfulness, completeness, or reliability of any content.</p>
+            
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">3. Limitation of Liability</h2>
+            <p className="uppercase font-bold text-text-main">IN NO EVENT SHALL VELORIA ACADEMY, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES WHATSOEVER.</p>
+            <p>This includes, without limitation, damages resulting from: (1) errors, mistakes, or inaccuracies of content; (2) personal injury or property damage, of any nature whatsoever, resulting from your access to and use of our services; (3) any unauthorized access to or use of our secure servers and/or any and all personal information stored therein; (4) any interruption or cessation of transmission to or from our services; (5) any bugs, viruses, trojan horses, or the like, which may be transmitted to or through our services by any third party; and/or (6) any errors or omissions in any content or for any loss or damage of any kind incurred as a result of your use of any content posted, emailed, transmitted, or otherwise made available via the services, whether based on warranty, contract, tort, or any other legal theory, and whether or not the company is advised of the possibility of such damages.</p>
+
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">4. Indemnification</h2>
+            <p>You agree to defend, indemnify, and hold harmless Veloria Academy, its parent corporation, officers, directors, employees and agents, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, and expenses (including but not limited to attorney's fees) arising from: (i) your use of and access to the Service; (ii) your violation of any term of these Terms of Service; (iii) your violation of any third party right, including without limitation any copyright, property, or privacy right; or (iv) any claim that your content caused damage to a third party. This defense and indemnification obligation will survive these Terms of Service and your use of the Service.</p>
+            
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">5. User Account and Security</h2>
+            <p>To use certain features of our platform, you must register for an account. You agree to provide accurate, current, and complete information during the registration process and to update such information to keep it accurate, current, and complete. You are entirely responsible for maintaining the confidentiality of your password and account. Furthermore, you are entirely responsible for any and all activities that occur under your account.</p>
+            
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">6. Third-Party Links and Resources</h2>
+            <p>The Service may contain links to third-party websites or services that are not owned or controlled by Veloria Academy. We have no control over, and assume no responsibility for, the content, privacy policies, or practices of any third party websites or services. You further acknowledge and agree that Veloria Academy shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with the use of or reliance on any such content, goods, or services available on or through any such websites or services.</p>
+
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">7. Termination</h2>
+            <p>We may terminate or suspend your account and bar access to the Service immediately, without prior notice or liability, under our sole discretion, for any reason whatsoever and without limitation, including but not limited to a breach of the Terms. If you wish to terminate your account, you may simply discontinue using the Service. All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity, and limitations of liability.</p>
+
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">8. Governing Law</h2>
+            <p>These Terms shall be governed and construed in accordance with the laws, without regard to its conflict of law provisions. Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect.</p>
           </div>
         </main>
         <Footer />
@@ -1372,12 +1393,44 @@ export const PrivacyPage: React.FC = () => {
           <h1 className="text-3xl font-black text-text-main mb-6">Privacy Policy</h1>
           <p className="text-text-muted leading-relaxed mb-4">Effective Date: {new Date().getFullYear()}</p>
           <div className="space-y-6 text-sm text-text-muted leading-relaxed">
-            <p>At Veloria Academy, we respect your privacy and are committed to protecting your personal data.</p>
-            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">1. Data We Collect</h2>
-            <p>We may collect, use, store and transfer different kinds of personal data about you, including identity and contact data.</p>
-            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">2. How We Use Your Data</h2>
-            <p>We will only use your personal data when the law allows us to. Most commonly, we will use your personal data to provide our services to you.</p>
-            <p className="mt-8 italic">This is a placeholder Privacy Policy page. A full legal document will be provided later.</p>
+            <p>At Veloria Academy, we prioritize transparency. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, platform, and associated services. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access the site.</p>
+            
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">1. Information We Collect</h2>
+            <p>We may collect information about you in a variety of ways. The information we may collect on the Site includes:</p>
+            <ul className="list-disc pl-6 space-y-2 mt-2">
+              <li><strong>Personal Data:</strong> Personally identifiable information, such as your name, shipping address, email address, and telephone number, and demographic information that you voluntarily give to us when you register with the Site.</li>
+              <li><strong>Derivative Data:</strong> Information our servers automatically collect when you access the Site, such as your IP address, your browser type, your operating system, your access times, and the pages you have viewed directly before and after accessing the Site.</li>
+              <li><strong>Financial Data:</strong> Financial information, such as data related to your payment method (e.g., valid credit card number, card brand, expiration date) that we may collect when you purchase, order, return, exchange, or request information about our services.</li>
+            </ul>
+
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">2. Use of Your Information</h2>
+            <p>Having accurate information about you permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use information collected about you via the Site to:</p>
+            <ul className="list-disc pl-6 space-y-2 mt-2">
+              <li>Create and manage your account.</li>
+              <li>Process your transactions and send you related information, including purchase confirmations and invoices.</li>
+              <li>Resolve disputes and troubleshoot problems.</li>
+              <li>Respond to product and customer service requests.</li>
+              <li>Deliver targeted advertising, coupons, newsletters, and other information regarding promotions and the Site to you.</li>
+              <li>Monitor and analyze usage and trends to improve your experience with the Site.</li>
+            </ul>
+
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">3. Disclosure of Your Information</h2>
+            <p>We may share information we have collected about you in certain situations. Your information may be disclosed as follows:</p>
+            <ul className="list-disc pl-6 space-y-2 mt-2">
+              <li><strong>By Law or to Protect Rights:</strong> If we believe the release of information about you is necessary to respond to legal process, to investigate or remedy potential violations of our policies, or to protect the rights, property, and safety of others, we may share your information as permitted or required by any applicable law, rule, or regulation.</li>
+              <li><strong>Third-Party Service Providers:</strong> We may share your information with third parties that perform services for us or on our behalf, including payment processing, data analysis, email delivery, hosting services, customer service, and marketing assistance.</li>
+              <li><strong>Business Transfers:</strong> We may share or transfer your information in connection with, or during negotiations of, any merger, sale of company assets, financing, or acquisition of all or a portion of our business to another company.</li>
+            </ul>
+
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">4. Data Security</h2>
+            <p>We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse. Any information disclosed online is vulnerable to interception and misuse by unauthorized parties. Therefore, we cannot guarantee complete security if you provide personal information.</p>
+
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">5. Disclaimer of Liability</h2>
+            <p className="uppercase font-bold text-text-main">TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, WE DO NOT ASSUME ANY RESPONSIBILITY OR LIABILITY FOR ANY LOSS, DAMAGE, OR UNAUTHORIZED ACCESS TO OR USE OF YOUR PERSONAL INFORMATION.</p>
+            <p>You acknowledge that you provide your personal information at your own risk. By using the platform, you expressly agree that Veloria Academy shall not be liable for any direct, indirect, incidental, special, consequential, or exemplary damages resulting from the unauthorized access, use, or disclosure of your personal data.</p>
+            
+            <h2 className="text-xl font-bold text-text-main mt-8 mb-4">6. Cookies and Tracking Technologies</h2>
+            <p>We may use cookies, web beacons, tracking pixels, and other tracking technologies on the Site to help customize the Site and improve your experience. When you access the Site, your personal information is not collected through the use of tracking technology. Most browsers are set to accept cookies by default. You can remove or reject cookies, but be aware that such action could affect the availability and functionality of the Site.</p>
           </div>
         </main>
         <Footer />
