@@ -466,7 +466,7 @@ export const Footer: React.FC = () => {
         <span>© {new Date().getFullYear()} Veloria Academy. All rights reserved.</span>
         <div className="flex gap-4">
           <Link to="/terms" className="hover:text-secondary cursor-pointer">Terms of Service</Link>
-          <Link to="/privacy" className="hover:text-secondary cursor-pointer">Privacy Policy</Link>
+          <Link to="/privacy-policy" className="hover:text-secondary cursor-pointer">Privacy Policy</Link>
         </div>
       </div>
     </footer>
