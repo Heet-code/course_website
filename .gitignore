@@ -34,3 +34,9 @@ server/node_modules
 playwright-report
 test-results
 coverage
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+!.env.example
